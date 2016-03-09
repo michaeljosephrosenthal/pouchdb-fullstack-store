@@ -1,6 +1,6 @@
-var jPath = require('json-path');
-var Queue = require('async-function-queue');
-var equal = require('deep-equal');
+import jPath from 'json-path'
+import Queue from 'async-function-queue'
+import equal from 'deep-equal'
 import { bindActionCreators } from 'reactuate'
 
 function warn(what) {
@@ -144,7 +144,7 @@ function onDbChange(path, {doc: changeDoc, ...change}) {
     }
 }
 
-export default function createPouchMiddleware(paths = []) {
+export default function reduxMiddleware(paths = []) {
     if (!Array.isArray(paths)) 
         paths = [paths];
 

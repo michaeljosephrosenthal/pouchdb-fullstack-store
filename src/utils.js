@@ -18,32 +18,3 @@ export function serializer(Type, type, fields, sluggify){
     return (doc) => Type(Object.assign({}, doc, {_id: `${type}/${sluggify(doc)}`}))
 }
 
-function typedDataFlow({Type, serialize}){
-    return ({action, handler}) => {
-        return {
-            action: { type: action, payload: t.maybe(Type) },
-            reducer: (state, {payload}) => {
-                return (Type.is(payload)) ? handler(state, serialize(payload)) : state
-            }
-        }
-    }
-}
-
-export function defaultDataFlows({Type, serialize, initialState = []}){
-    const dataFlow = typedDataFlow({Type, serialize})
-    return [
-        dataFlow({
-            action: 'update',
-            handler: (state, payload) => state.map(doc => doc._id == payload._id ? payload : doc)
-        }),
-        dataFlow({
-            action: 'insert',
-            handler: (state, payload) => [payload, ...state]
-        }),
-        dataFlow({
-            action: 'remove',
-            handler: (state, {_id}) => state.filter(doc => doc._id != _id)
-        })
-    ]
-}
-

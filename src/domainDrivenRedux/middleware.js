@@ -1,7 +1,6 @@
-import t from 'tcomb'
-import { bindActionCreators } from 'reactuate'
-import PouchMiddleware from './pouchReduxMiddleware'
-import db from './db'
+import { bindActionCreators } from 'redux'
+import reduxMiddleware from '../reduxMiddleware'
+import db from '../db'
 
 function dbActions({domain: {actions}}){
     let acts = Object.keys(actions)
@@ -23,14 +22,15 @@ function dbActions({domain: {actions}}){
     return acts != {} ? acts : false
 }
 
-export default function pouchMiddlewareGenerator(domains){
+export default function domainDrivenReduxMiddleware(domains){
     return PouchMiddleware(
-        Object.values(domains).filter(d => dbActions({domain: d}))
-        .map( domain => ({
-            path: `/${domain.prefix}`,
-            prefix: `${domain.dbPrefix}`,
-            db,
-            actions: dbActions({domain: domain})
-        }))
+        Object.values(domains)
+            .filter(domain => dbActions({ domain }))
+            .map( domain => ({
+                path: `/${domain.prefix}`,
+                prefix: `${domain.dbPrefix}`,
+                db,
+                actions: dbActions({domain: domain})
+            }))
     )
 }
