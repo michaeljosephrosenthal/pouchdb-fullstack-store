@@ -1,0 +1,26 @@
+{
+  "name": "soil_reactuate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node-simple-webpacker --server ./src/server.js --out ./build/server.js",
+    "dock": "npm rebuild; npm start",
+    "dist": "node-simple-webpacker --task dist --server ./src/server.js --out ./dist/server.js",
+    "deploy": "npm run dist; forever start ./dist/server.js",
+    "build": "NODE_ENV=production webpack --config node_modules/reactuate/default-webpack-config.js --progress --colors"
+  },
+  "author": "Michael Joseph Rosenthal",
+  "license": "ISC",
+  "dependencies": {
+    "pouch-websocket-sync": "0.1.5",
+    "pouchdb": "^5.2.1",
+    "pouchdb-authentication": "^0.4.3",
+    "react": "^0.14.7",
+    "slug": "^0.9.1"
+  },
+  "devDependencies": {
+    "node-simple-webpacker": "git://github.com/michaeljosephrosenthal/node-simple-webpacker.git"
+  }
+}
