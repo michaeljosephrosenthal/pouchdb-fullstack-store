@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+coverage
+soil-server/
+settings.js
+*.swp
+couchdb.std*
+.pomo
+build

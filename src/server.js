@@ -1,5 +1,4 @@
 import db from './db'
-import { db as settings } from '../settings'
 import req from 'requisition'
 
 function catchAndTrace(message, err){
@@ -7,10 +6,10 @@ function catchAndTrace(message, err){
     console.trace(err)
 }
 
-async function createSuperAdmin({ name, password }){
+async function createSuperAdmin({ uri, name, password }){
     try {
         let resp = await req
-            .put(`${settings.uri}/_config/admins/${name}`)
+            .put(`${uri}/_config/admins/${name}`)
             .send(`"${password}"`)
         console.log('Server admin created')
     } catch (err) {
@@ -31,10 +30,10 @@ async function createSuperAdmin({ name, password }){
 }
 
 export async function initDbUsers({
-    server, client: {name, password}
+    uri, server, client: {name, password}
 }){
     try {
-        await createSuperAdmin(server)
+        await createSuperAdmin({ uri, ...server })
     } catch (err) {
         catchAndTrace('error in initDbUsers', err)
     }
