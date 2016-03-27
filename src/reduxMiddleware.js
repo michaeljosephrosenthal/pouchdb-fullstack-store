@@ -1,7 +1,7 @@
 import jPath from 'json-path'
 import Queue from 'async-function-queue'
 import equal from 'deep-equal'
-import { bindActionCreators } from 'reactuate'
+import { bindActionCreators } from 'redux'
 
 function warn(what) {
     var fn = console.warn || console.log;
@@ -28,8 +28,10 @@ function initFromDb(path) {
         path.lifecycleState = 'INITIALIZING'
         path.db.allDocs({
             include_docs: true,
-            startkey: path.prefix,
-            endkey: `${path.prefix}\uffff`
+            ...(path.prefix ? {
+                startkey: path.prefix,
+                endkey: `${path.prefix}\uffff`
+            } : {})
         }).then(result => {
             result.rows.forEach(row => onDbChange(path, row))
             path.lifecycleState = 'INITIALIZED'
@@ -41,7 +43,9 @@ function initFromDb(path) {
 function listen(path) {
     var changes = path.db.changes({
         live: true, since: 'now', include_docs: true,
-        filter: ({_id}) => _id.split('/')[0] == path.prefix
+        ...(path.prefix ? {
+            filter: ({_id}) => _id.split('/')[0] == path.prefix
+            } : {})
     });
     changes.on('change', change => onDbChange(path, change));
 }
@@ -94,7 +98,7 @@ class Path {
   wrapActionCreators(dispatch){
       this.propagations = Object.keys(this.actions).reduce(
           (propagations, act) => {
-          propagations[act] = doc => {
+              propagations[act] = doc => {
                   let action = this.actions[act](doc)
                   if(action) dispatch(action)
               }

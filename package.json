@@ -1,28 +1,28 @@
 {
-  "name": "soil_reactuate",
+  "name": "domain-driven-pouchdb-persistence-plugin",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node-simple-webpacker --server ./src/server.js --out ./build/server.js",
-    "dock": "npm rebuild; npm start",
-    "dist": "node-simple-webpacker --task dist --server ./src/server.js --out ./dist/server.js",
-    "deploy": "npm run dist; forever start ./dist/server.js",
-    "build": "NODE_ENV=production webpack --config node_modules/reactuate/default-webpack-config.js --progress --colors"
+    "dist-for-browser": "node-simple-webpacker --context BROWSER --task dist --entry ./src/index.js --out ./browser.js --modules src",
+    "dist-for-node": "node-simple-webpacker --context NODE --task dist --entry ./src/index.js --out ./node.js --modules src"
   },
   "author": "Michael Joseph Rosenthal",
   "license": "ISC",
   "dependencies": {
     "async-function-queue": "^1.0.0",
+    "babel-polyfill": "^6.7.4",
     "deep-equal": "^1.0.1",
     "json-path": "^0.1.3",
-    "pouch-websocket-sync": "0.1.5",
     "pouchdb": "^5.2.1",
     "pouchdb-authentication": "^0.4.3",
-    "react": "^0.14.7",
+    "redux": "^3.3.1",
     "requisition": "^1.7.0",
     "slug": "^0.9.1",
+    "strictduck": "strictduck/strictduck",
+    "strictduck-domain-driven-fullstack": "strictduck/domain-driven-fullstack",
     "tcomb": "^3.0.0"
   },
   "devDependencies": {

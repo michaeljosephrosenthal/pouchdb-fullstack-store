@@ -1,4 +1,3 @@
-import db from './db'
 import req from 'requisition'
 
 function catchAndTrace(message, err){
@@ -21,7 +20,7 @@ async function createSuperAdmin({ uri, name, password }){
     }
 
     try {
-        let resp = await db.login(name, password)
+        let resp = await this.login(name, password)
         console.log('Server admin logged in')
         return resp
     } catch (err) {
@@ -29,25 +28,32 @@ async function createSuperAdmin({ uri, name, password }){
     }
 }
 
-export async function initDbUsers({
-    uri, server, client: {name, password}
-}){
+async function initUser({name, password}){
     try {
-        await createSuperAdmin({ uri, ...server })
-    } catch (err) {
-        catchAndTrace('error in initDbUsers', err)
-    }
-
-    try {
-        await db.signup(name, password)
+        await this.signup(name, password)
     } catch (err) {
         if(err.status != 409){
             catchAndTrace('error creating superadmin', err)
         } else {
-            console.log('Client user already exists')
+            console.log(`user ${name} already exists`)
         }
     }
 }
-    
 
-export default db
+async function initDbUsers({
+    credentials: {admin, users}
+}){
+    try {
+        await createSuperAdmin({ uri, ...admin })
+    } catch (err) {
+        catchAndTrace('error in initDbUsers', err)
+    }
+    users.forEach(initUser)
+}
+
+export default async function configure({
+    settings: { db: {uri, credentials} }
+}){
+    if(credentials)
+        initDbUsers({credentials});
+}
