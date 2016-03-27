@@ -1,8 +1,20 @@
 import req from 'requisition'
+import initPouchDB  from './db'
+import { execSync } from 'child_process'
 
 function catchAndTrace(message, err){
     console.log(message, err)
     console.trace(err)
+}
+
+function injectCredentials({uri, protocols=['http', 'https'], admin: {name, password} }){
+    let p = protocols.filter(p => uri.startsWith(`${p}://`))[0] + '://'
+    return uri.replace(p, `${p}${name}:${password}@`)
+}
+
+export function ensureRemoteExistence({uri, name, credentials: {admin} = {}}){
+    let endpoint = admin ? injectCredentials({uri: `${uri}/${name}`, admin}) : `${uri}/${name}`
+    console.log(execSync(`curl -X PUT ${endpoint}`))
 }
 
 async function createSuperAdmin({ uri, name, password }){
@@ -41,19 +53,19 @@ async function initUser({name, password}){
 }
 
 async function initDbUsers({
-    credentials: {admin, users}
+    uri, credentials: {admin, users}
 }){
     try {
-        await createSuperAdmin({ uri, ...admin })
+        await createSuperAdmin.bind(this)({ uri, ...admin })
     } catch (err) {
         catchAndTrace('error in initDbUsers', err)
     }
-    users.forEach(initUser)
+    users.forEach(initUser.bind(this))
 }
 
 export default async function configure({
     settings: { db: {uri, credentials} }
 }){
     if(credentials)
-        initDbUsers({credentials});
+        initDbUsers.bind(this)({uri, credentials});
 }

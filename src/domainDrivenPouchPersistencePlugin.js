@@ -1,23 +1,16 @@
 import { storePersistencePlugin } from 'strictduck-domain-driven-fullstack'
-
-import PouchDB from 'pouchdb'
-import PouchDbAuthentication from 'pouchdb-authentication'
-
-PouchDB.plugin(PouchDbAuthentication)
-
 import domainMiddlewareGenerator from './domainMiddlewareGenerator'
+import init from './db'
 
 const provide = ($ES.CONTEXT == 'NODE' ? require('./configureServer') : require('./domainMiddlewareGenerator')).default
-
-function fullUri({name, uri}){
-    return `${uri}/${name}`
-}
+const putDb = ($ES.CONTEXT == 'NODE' ? require('./configureServer').ensureRemoteExistence : _ => _)
 
 export default storePersistencePlugin.implement({
     name: 'DomainDrivenPouchPersistencePlugin',
     constructor({ Domains: { settings: { db } } }){
+        putDb(db)
         return [{
-            db: new PouchDB(fullUri(db), {skipSetup: true}),
+            db: init(db),
             middlewareGenerator: domainMiddlewareGenerator
         }]
     },
