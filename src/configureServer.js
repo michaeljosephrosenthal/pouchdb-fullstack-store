@@ -14,7 +14,7 @@ function injectCredentials({uri, protocols=['http', 'https'], admin: {name, pass
 
 export function ensureRemoteExistence({uri, name, credentials: {admin} = {}}){
     let endpoint = admin ? injectCredentials({uri: `${uri}/${name}`, admin}) : `${uri}/${name}`
-    console.log(execSync(`curl -X PUT ${endpoint}`))
+    execSync(`curl -silent -X PUT ${endpoint}`)
 }
 
 async function createSuperAdmin({ uri, name, password }){
