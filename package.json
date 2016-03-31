@@ -2,12 +2,10 @@
   "name": "domain-driven-pouchdb-persistence-plugin",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node-simple-webpacker --server ./src/server.js --out ./build/server.js",
-    "dist-for-browser": "node-simple-webpacker --context BROWSER --task dist --entry ./src/index.js --out ./browser.js --modules src",
-    "dist-for-node": "node-simple-webpacker --context NODE --task dist --entry ./src/index.js --out ./node.js --modules src"
+    "dist": "polypacker --preset FULLSTACK_COMPONENT --env PRODUCTION",
+    "watch": "polypacker --preset FULLSTACK_COMPONENT --watch"
   },
   "author": "Michael Joseph Rosenthal",
   "license": "ISC",
@@ -27,6 +25,6 @@
     "tcomb": "^3.0.0"
   },
   "devDependencies": {
-    "node-simple-webpacker": "git://github.com/michaeljosephrosenthal/node-simple-webpacker.git"
+    "polypacker": "git://github.com/michaeljosephrosenthal/polypacker.git"
   }
 }
