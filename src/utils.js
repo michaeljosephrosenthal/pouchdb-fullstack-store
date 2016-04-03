@@ -53,7 +53,8 @@ export function authenticateRoutes(route, persister){
         route,
         {
             ...authenticateRouteBasedOnOnEnter({route, persister}),
-            ...authenticateFromRouteBasedOnComponent({route, persister})
+            ...authenticateFromRouteBasedOnComponent({route, persister}),
+            key: route.props.path
         },
         route.props.children ?
             route.props.children.map(route => authenticateRoutes(route, persister)) :
