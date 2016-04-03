@@ -47,6 +47,7 @@ function authenticateFromRouteBasedOnComponent({route, persister}) {
         component: (props) => <route.props.component.component auth={persister} {...props}/>
     } : {}
 }
+
 export function authenticateRoutes(route, persister){
     persister = persister || this.db
     return React.cloneElement(
@@ -61,4 +62,3 @@ export function authenticateRoutes(route, persister){
             undefined
     )
 }
-
