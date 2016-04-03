@@ -4,8 +4,8 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "dist": "polypacker --preset FULLSTACK_COMPONENT --env PRODUCTION",
-    "watch": "polypacker --preset FULLSTACK_COMPONENT --watch"
+    "dist":  "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --env PRODUCTION",
+    "watch": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --watch "
   },
   "author": "Michael Joseph Rosenthal",
   "license": "ISC",
@@ -17,9 +17,11 @@
     "json-path": "^0.1.3",
     "pouchdb": "^5.2.1",
     "pouchdb-authentication": "^0.4.3",
+    "react": "^0.14.8",
     "redux": "^3.3.1",
     "requisition": "^1.7.0",
     "slug": "^0.9.1",
+    "source-map-support": "^0.4.0",
     "strictduck": "strictduck/strictduck",
     "strictduck-domain-driven-fullstack": "strictduck/domain-driven-fullstack",
     "tcomb": "^3.0.0"

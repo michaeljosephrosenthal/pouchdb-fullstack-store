@@ -7,3 +7,6 @@ settings.js
 couchdb.std*
 .pomo
 build
+*hot-update.json
+*hot-update.js
+*hot-update.js.map

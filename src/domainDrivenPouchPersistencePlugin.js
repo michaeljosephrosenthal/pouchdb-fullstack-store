@@ -1,6 +1,7 @@
 import { storePersistencePlugin } from 'strictduck-domain-driven-fullstack'
 import domainMiddlewareGenerator from './domainMiddlewareGenerator'
 import init from './db'
+import { authenticateRoutes, provideAuthFromRoute } from './utils'
 
 const provide = ($ES.CONTEXT == 'NODE' ? require('./configureServer') : require('./domainMiddlewareGenerator')).default
 const putDb = ($ES.CONTEXT == 'NODE' ? require('./configureServer').ensureRemoteExistence : _ => _)
@@ -11,7 +12,9 @@ export default storePersistencePlugin.implement({
         putDb(db)
         return [{
             db: init(db),
-            middlewareGenerator: domainMiddlewareGenerator
+            middlewareGenerator: domainMiddlewareGenerator,
+            authenticateRoutes,
+            provideAuthFromRoute
         }]
     },
     provider(...args){
