@@ -62,3 +62,41 @@ export function authenticateRoutes(route, persister){
             undefined
     )
 }
+
+function provideInjection(dependentFunction, persister){
+    return (...args) => dependentFunction(persister || this.db, ...args)
+}
+
+function provideInjectionToHandlers(route, persister){
+    route.handlers = route.handlers.map(
+        handler => handler.requiresPersister ?
+           provideInjection(handler.dependentFunction, persister) :
+           handler
+    )
+    return route
+}
+
+
+function expandPersisterBackedDomain(domain, persister){
+    let routes = domain.get('routes')
+    Object.keys(domain.get('routes'))
+        .map(route => domain.register('routes', route, provideInjectionToHandlers(routes[route], persister)))
+    return domain
+}
+
+export function provideInjectionForDomainRouteHandlers(domains, persister){
+    persister = persister || this.db
+    return Object.keys(domains)
+        .reduce((newDomains, k) => {
+            newDomains[k] = expandPersisterBackedDomain(domains[k], persister);
+            return newDomains
+        }, {})
+}
+
+export function requireInjection(dependentFunction){
+    return {
+        requiresPersister: true,
+        dependentFunction
+    }
+}
+
