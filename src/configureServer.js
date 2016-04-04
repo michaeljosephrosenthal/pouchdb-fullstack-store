@@ -19,7 +19,7 @@ export function ensureRemoteExistence({uri, name, credentials: {admin} = {}}){
 
 async function createSuperAdmin({ uri, name, password }){
     try {
-        let resp = await req
+        let resp = await req // TODO: this doesn't actually throw an error on 401
             .put(`${uri}/_config/admins/${name}`)
             .send(`"${password}"`)
         console.log('Server admin created')
