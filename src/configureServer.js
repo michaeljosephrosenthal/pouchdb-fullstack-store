@@ -13,6 +13,9 @@ function injectCredentials({uri, protocols=['http', 'https'], admin: {name, pass
 }
 
 export function ensureRemoteExistence({uri, name, credentials: {admin} = {}}){
+    if(admin){
+        execSync(`curl -silent -X PUT -d '${admin.password}' ${uri}/_config/admins/${adomin.name}`)
+    }
     let endpoint = admin ? injectCredentials({uri: `${uri}/${name}`, admin}) : `${uri}/${name}`
     execSync(`curl -silent -X PUT ${endpoint}`)
 }
