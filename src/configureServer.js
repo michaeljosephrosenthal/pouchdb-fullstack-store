@@ -63,7 +63,6 @@ async function initDbUsers({
     } catch (err) {
         catchAndTrace('error in initDbUsers', err)
     }
-    console.log(users)
     users.forEach(initUser.bind(this))
 }
 

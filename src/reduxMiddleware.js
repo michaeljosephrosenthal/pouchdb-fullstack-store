@@ -26,7 +26,7 @@ const defaultActions = {
 function initFromDb(path) {
     if(!path.lifecycleState){
         path.lifecycleState = 'INITIALIZING'
-        path.db.allDocs({
+        return path.db.allDocs({
             include_docs: true,
             ...(path.prefix ? {
                 startkey: path.prefix,
@@ -36,7 +36,7 @@ function initFromDb(path) {
             result.rows.forEach(row => onDbChange(path, row))
             path.lifecycleState = 'INITIALIZED'
             listen(path)
-        }).catch(err => console.log(err))
+        })
     }
 }
 
@@ -107,8 +107,16 @@ class Path {
       )
   }
 
-  initFromDb(){ initFromDb(this) }
-  
+  initFromDb(){
+      initFromDb(this).catch(err => {
+          if(err.status == 401){
+              this.lifecycleState = false
+              this.db.once('login', _ => initFromDb(this))
+          } else {
+              throw err
+          }
+      })
+  }
 }
 
 function differences(oldDocs, newDocs) {

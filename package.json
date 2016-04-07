@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "dist":  "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --env PRODUCTION",
+    "dist": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --env PRODUCTION",
     "watch": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --watch "
   },
   "author": "Michael Joseph Rosenthal",
@@ -13,6 +13,7 @@
     "async-function-queue": "^1.0.0",
     "babel-polyfill": "^6.7.4",
     "deep-equal": "^1.0.1",
+    "events": "^1.1.0",
     "fibers": "^1.0.10",
     "json-path": "^0.1.3",
     "pouchdb": "^5.2.1",
