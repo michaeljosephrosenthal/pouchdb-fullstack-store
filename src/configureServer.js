@@ -12,12 +12,20 @@ function injectCredentials({uri, protocols=['http', 'https'], admin: {name, pass
     return uri.replace(p, `${p}${name}:${password}@`)
 }
 
+function safeExec(command){
+    try {
+        execSync(command)
+    } catch(err){
+        console.log(`command "${command}" failed with with error ${err}`)
+    }
+}
+
 export function ensureRemoteExistence({uri, name, credentials: {admin} = {}}){
     if(admin){
-        execSync(`curl -silent -X PUT -d '${admin.password}' ${uri}/_config/admins/${admin.name}`)
+        safeExec(`curl -silent -X PUT -d '${admin.password}' ${uri}/_config/admins/${admin.name}`)
     }
     let endpoint = admin ? injectCredentials({uri: `${uri}/${name}`, admin}) : `${uri}/${name}`
-    execSync(`curl -silent -X PUT ${endpoint}`)
+    safeExec(`curl -silent -X PUT ${endpoint}`)
 }
 
 async function createSuperAdmin({ uri, name, password }){

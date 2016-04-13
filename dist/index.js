@@ -1,1 +1,3 @@
-module.exports = require('./for/browser'/* + $ES.CONTEXT.toLowerCase()*/)
+module.exports = {
+    default: polypack()
+}

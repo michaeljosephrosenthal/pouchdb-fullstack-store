@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "dist": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --env PRODUCTION",
+    "dist": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react",
     "watch": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react --watch "
   },
   "author": "Michael Joseph Rosenthal",
