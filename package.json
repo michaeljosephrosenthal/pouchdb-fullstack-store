@@ -1,7 +1,7 @@
 {
   "name": "domain-driven-pouchdb-persistence-plugin",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "persistence plugin for bufflehead",
   "main": "./dist/index.js",
   "scripts": {
     "dist": "polypacker --preset FULLSTACK_COMPONENT --babelPreset react",
@@ -23,11 +23,12 @@
     "requisition": "^1.7.0",
     "slug": "^0.9.1",
     "source-map-support": "^0.4.0",
-    "strictduck": "strictduck/strictduck",
-    "strictduck-domain-driven-fullstack": "strictduck/domain-driven-fullstack",
+    "strictduck": "0.1.1",
+    "strictduck-domain-driven-fullstack": "0.0.1",
+    "sync-request": "^3.0.0",
     "tcomb": "^3.0.0"
   },
   "devDependencies": {
-    "polypacker": "git://github.com/michaeljosephrosenthal/polypacker.git"
+    "polypacker": "0.1.1"
   }
 }
