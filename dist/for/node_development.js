@@ -1,2 +1,972 @@
-require("source-map-support").install(),module.exports=function(e){function t(n){if(r[n])return r[n].exports;var o=r[n]={exports:{},id:n,loaded:!1};return e[n].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){e.exports=r(8)},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){return function(){var t=e.apply(this,arguments);return new Promise(function(e,r){function n(o,i){try{var u=t[o](i),a=u.value}catch(c){return void r(c)}return u.done?void e(a):Promise.resolve(a).then(function(e){return n("next",e)},function(e){return n("throw",e)})}return n("next")})}}function i(e,t){console.log(e,t),console.trace(t)}function u(e){var t=e.uri,r=e.protocols,n=void 0===r?["http","https"]:r,o=e.admin,i=o.name,u=o.password,a=n.filter(function(e){return t.startsWith(e+"://")})[0]+"://";return t.replace(a,""+a+i+":"+u+"@")}function a(e){try{(0,m.execSync)(e)}catch(t){console.log('command "'+e+'" failed with with error '+t)}}function c(e){var t=e.uri,r=e.name,n=e.credentials;n=void 0===n?{}:n;var o=n.admin;o&&a("curl -silent -X PUT -d '"+o.password+"' "+t+"/_config/admins/"+o.name);var i=o?u({uri:t+"/"+r,admin:o}):t+"/"+r;a("curl -silent -X PUT "+i)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e},f=function(){var e=o(regeneratorRuntime.mark(function t(e){var r,n,o=e.uri,u=e.name,a=e.password;return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.prev=0,e.next=3,v["default"].put(o+"/_config/admins/"+u).send('"'+a+'"');case 3:r=e.sent,console.log("Server admin created"),e.next=10;break;case 7:e.prev=7,e.t0=e["catch"](0),409!=e.t0.status?i("error creating superadmin",e.t0):console.log("Server admin already exists");case 10:return e.prev=10,e.next=13,this.login(u,a);case 13:return n=e.sent,console.log("Server admin logged in"),e.abrupt("return",n);case 18:e.prev=18,e.t1=e["catch"](10),i("error logging in superadmin",e.t1);case 21:case"end":return e.stop()}},t,this,[[0,7],[10,18]])}));return function(t){return e.apply(this,arguments)}}(),d=function(){var e=o(regeneratorRuntime.mark(function t(e){var r=e.name,n=e.password;return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.prev=0,e.next=3,this.signup(r,n);case 3:e.next=8;break;case 5:e.prev=5,e.t0=e["catch"](0),409!=e.t0.status?i("error creating superadmin",e.t0):console.log("user "+r+" already exists");case 8:case"end":return e.stop()}},t,this,[[0,5]])}));return function(t){return e.apply(this,arguments)}}(),p=function(){var e=o(regeneratorRuntime.mark(function t(e){var r=e.uri,n=e.credentials,o=n.admin,u=n.users;return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.prev=0,e.next=3,f.bind(this)(s({uri:r},o));case 3:e.next=8;break;case 5:e.prev=5,e.t0=e["catch"](0),i("error in initDbUsers",e.t0);case 8:u.forEach(d.bind(this));case 9:case"end":return e.stop()}},t,this,[[0,5]])}));return function(t){return e.apply(this,arguments)}}();t.ensureRemoteExistence=c;var l=r(17),v=n(l),h=r(2),m=(n(h),r(11));t["default"]=function(){function e(e){return t.apply(this,arguments)}var t=o(regeneratorRuntime.mark(function r(e){var t=e.settings.db,n=t.uri,o=t.credentials;return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:o&&p.bind(this)({uri:n,credentials:o});case 1:case"end":return e.stop()}},r,this)}));return e}()},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){var t=e.name,r=e.uri;return r+"/"+t}function i(e){return new a["default"](o(e),{skipSetup:!0})}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=i;var u=r(14),a=n(u),c=r(15),s=n(c);a["default"].plugin(s["default"])},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){var t=e.path,r=e.persister;return function(e,n,o){var i=function(r){n({nextPathname:e.location.pathname},t),o()};(r||this.db).getSession(function(e,t){e?(console.log(e),i()):t.userCtx.name?o():i()})}}function i(e){return{requiresAuthentication:!0,path:e}}function u(e){var t=function(e){return e};return Object.assign(t,{providesAuthentication:!0,component:e}),t}function a(e){var t=e.route,r=e.persister;return t.props.onEnter&&t.props.onEnter.requiresAuthentication?{onEnter:o({path:t.props.onEnter.path,persister:r})}:{}}function c(e){var t=e.route,r=e.persister;return t.props.component&&t.props.component.providesAuthentication?{component:function(e){return b["default"].createElement(t.props.component.component,h({auth:r},e))}}:{}}function s(e,t){return t=t||this.db,b["default"].cloneElement(e,h({},a({route:e,persister:t}),c({route:e,persister:t}),{key:e.props.path}),e.props.children?e.props.children.map(function(e){return s(e,t)}):void 0)}function f(e,t){var r=this;return function(){for(var n=arguments.length,o=Array(n),i=0;n>i;i++)o[i]=arguments[i];return e.apply(void 0,[t||r.db].concat(o))}}function d(e,t){return e.handlers=e.handlers.map(function(e){return e.requiresPersister?f(e.dependentFunction,t):e}),e}function p(e,t){var r=e.get("routes");return Object.keys(e.get("routes")).map(function(n){return e.register("routes",n,d(r[n],t))}),e}function l(e,t){return t=t||this.db,Object.keys(e).reduce(function(r,n){return r[n]=p(e[n],t),r},{})}function v(e){return{requiresPersister:!0,dependentFunction:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.defaultDataFlows=void 0;var h=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e};t.requireAuthWithPersister=o,t.requireAuthFromRoute=i,t.provideAuthFromRoute=u,t.authenticateRoutes=s,t.provideInjectionForDomainRouteHandlers=l,t.requireInjection=v;var m=r(16),b=n(m),y=r(5),g=n(y);t.defaultDataFlows=g["default"]},function(e,t){e.exports=require("redux")},function(e,t){"use strict";function r(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]={INSERT:function(e,t){return[t].concat(r(e))},UPDATE:function(e,t){return e.map(function(e){return e._id==t._id?t:e})},REMOVE:function(e,t){var r=t._id;return e.filter(function(e){return e._id!=r})}}},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0});var o=r(18),i=r(7),u=n(i),a=r(2),c=n(a),s=r(3),f=r(1)["default"],d=r(1).ensureRemoteExistence;t["default"]=o.storePersistencePlugin.implement({name:"DomainDrivenPouchPersistencePlugin",constructor:function(e){var t=e.Domains.settings.db;return d(t),[{db:(0,c["default"])(t),middlewareGenerator:u["default"],authenticateRoutes:s.authenticateRoutes,provideAuthFromRoute:s.provideAuthFromRoute,provideInjectionForDomainRouteHandlers:s.provideInjectionForDomainRouteHandlers}]},provider:function(){return f.bind(this.db).apply(void 0,arguments)}})},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){return Object.keys(e).reduce(function(t,r){return t[e[r]]=r,t},{})}function i(e){var t=e.domain,r=t.actions,n=void 0===r?{}:r,i=t.pouchActionMap,u=void 0===i?{insert:"insert",update:"update",remove:"remove"}:i,a=o(u),c=Object.keys(n).filter(function(e){return[u.update,u.insert,u.remove].indexOf(e)>=0}).reduce(function(e,t){return e[a[t]]=function(e){try{return n[t](e)}catch(r){if(r instanceof TypeError)return;throw r}},e},{});return Object.keys(c).length?c:!1}function u(e){var t=e.db,r=e.domains;return(0,c["default"])(Object.values(r).filter(function(e){return i({domain:e})}).map(function(e){return e}).map(function(e){return{path:"/"+e.prefix,prefix:""+(e.dbPrefix||""),db:t,actions:i({domain:e})}}))}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=u;var a=(r(4),r(9)),c=n(a)},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t.utils=t["default"]=void 0;var o=r(3);Object.keys(o).forEach(function(e){"default"!==e&&Object.defineProperty(t,e,{enumerable:!0,get:function(){return o[e]}})});var i=r(6),u=n(i);t["default"]=u["default"];t.utils=r(1)},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){var r={};for(var n in e)t.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(e,n)&&(r[n]=e[n]);return r}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function u(e){var t=console.warn||console.log;t&&t.call(console,e)}function a(e){return function(){throw new Error("no action provided for "+e)}}function c(e){return e.lifecycleState?void 0:(e.lifecycleState="INITIALIZING",e.db.allDocs(h({include_docs:!0},e.prefix?{startkey:e.prefix,endkey:e.prefix+"￿"}:{})).then(function(t){t.rows.forEach(function(t){return p(e,t)}),e.lifecycleState="INITIALIZED",s(e)}))}function s(e){var t=e.db.changes(h({live:!0,since:"now",include_docs:!0},e.prefix?{filter:function(t){var r=t._id;return r.split("/")[0]==e.prefix}}:{}));t.on("change",function(t){return p(e,t)})}function f(e,t){var r=b["default"].resolve(t,e.path);r&&r.length&&"INITIALIZED"==e.lifecycleState&&r.forEach(function(t){var r=d(e.docs,t),n=r.updated,o=r.deleted,i=r.inserted;i.concat(n).forEach(function(t){return e.insert(t)}),o.forEach(function(t){return e.remove(t)})})}function d(e,t){var r=[],n=[],o=Object.keys(e).map(function(t){return e[t]});return t.forEach(function(t){t._id||u("doc with no id"),o=o.filter(function(e){return e._id!==t._id});var i=e[t._id];i?(0,x["default"])(i,t)||n.push(t):r.push(t)}),{inserted:r,updated:n,deleted:o}}function p(e,t){var r=t.doc;o(t,["doc"]);if(r._deleted)e.docs[r._id]&&(delete e.docs[r._id],e.propagations.remove(r));else{var n=e.docs[r._id];e.docs[r._id]=r,n?e.propagations.update(r):e.propagations.insert(r)}}function l(){var e=arguments.length<=0||void 0===arguments[0]?[]:arguments[0];if(Array.isArray(e)||(e=[e]),!e.length)throw new Error("PouchMiddleware: no paths");return e=e.map(function(e){return new O(e)}),function(t){var r=t.dispatch,n=t.getState;return e.forEach(function(e){e.wrapActionCreators(r),e.initFromDb()}),function(t){return function(r){var o=t(r);return e.forEach(function(e){return f(e,n())}),o}}}}Object.defineProperty(t,"__esModule",{value:!0});var v=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),h=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e};t["default"]=l;var m=r(13),b=n(m),y=r(10),g=n(y),_=r(12),x=n(_),w=(r(4),{remove:a("remove"),update:a("update"),insert:a("insert")}),O=function(){function e(t){var r=t.path,n=void 0===r?".":r,o=t.prefix,u=void 0===o?"":o,a=t.db,c=t.actions;if(i(this,e),!a)throw new Error("path "+n.path+" needs a db");this.queue=(0,g["default"])(1),this.docs={},this.db=a,this.path=n,this.prefix=u,this.actions=Object.assign({},w,c)}return v(e,[{key:"insert",value:function(e){this.docs[e._id]=e;var t=this.db;this.queue.push(function(r){t.put(e,r)})}},{key:"remove",value:function(e){var t=this,r=this.db;this.queue.push(function(n){r.remove(e,n),delete t.docs[e._id]})}},{key:"wrapActionCreators",value:function(e){var t=this;this.propagations=Object.keys(this.actions).reduce(function(r,n){return r[n]=function(r){var o=t.actions[n](r);o&&e(o)},r},{})}},{key:"initFromDb",value:function(){var e=this;c(this)["catch"](function(t){if(401!=t.status)throw t;e.lifecycleState=!1,e.db.once("login",function(t){return c(e)})})}}]),e}()},function(e,t){e.exports=require("async-function-queue")},function(e,t){e.exports=require("child_process")},function(e,t){e.exports=require("deep-equal")},function(e,t){e.exports=require("json-path")},function(e,t){e.exports=require("pouchdb")},function(e,t){e.exports=require("pouchdb-authentication")},function(e,t){e.exports=require("react")},function(e,t){e.exports=require("requisition")},function(e,t){e.exports=require("strictduck-domain-driven-fullstack")}]);
+require("source-map-support").install();
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(8);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var createSuperAdmin = function () {
+	    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref3) {
+	        var uri = _ref3.uri;
+	        var name = _ref3.name;
+	        var password = _ref3.password;
+	
+	        var resp, _resp;
+	
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        _context.prev = 0;
+	                        _context.next = 3;
+	                        return _requisition2.default // TODO: this doesn't actually throw an error on 401
+	                        .put(uri + '/_config/admins/' + name).send('"' + password + '"');
+	
+	                    case 3:
+	                        resp = _context.sent;
+	
+	                        console.log('Server admin created');
+	                        _context.next = 10;
+	                        break;
+	
+	                    case 7:
+	                        _context.prev = 7;
+	                        _context.t0 = _context['catch'](0);
+	
+	                        if (_context.t0.status != 409) {
+	                            catchAndTrace('error creating superadmin', _context.t0);
+	                        } else {
+	                            console.log('Server admin already exists');
+	                        }
+	
+	                    case 10:
+	                        _context.prev = 10;
+	                        _context.next = 13;
+	                        return this.login(name, password);
+	
+	                    case 13:
+	                        _resp = _context.sent;
+	
+	                        console.log('Server admin logged in');
+	                        return _context.abrupt('return', _resp);
+	
+	                    case 18:
+	                        _context.prev = 18;
+	                        _context.t1 = _context['catch'](10);
+	
+	                        catchAndTrace('error logging in superadmin', _context.t1);
+	
+	                    case 21:
+	                    case 'end':
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, this, [[0, 7], [10, 18]]);
+	    }));
+	
+	    return function createSuperAdmin(_x) {
+	        return ref.apply(this, arguments);
+	    };
+	}();
+	
+	var initUser = function () {
+	    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref4) {
+	        var name = _ref4.name;
+	        var password = _ref4.password;
+	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	            while (1) {
+	                switch (_context2.prev = _context2.next) {
+	                    case 0:
+	                        _context2.prev = 0;
+	                        _context2.next = 3;
+	                        return this.signup(name, password);
+	
+	                    case 3:
+	                        _context2.next = 8;
+	                        break;
+	
+	                    case 5:
+	                        _context2.prev = 5;
+	                        _context2.t0 = _context2['catch'](0);
+	
+	                        if (_context2.t0.status != 409) {
+	                            catchAndTrace('error creating superadmin', _context2.t0);
+	                        } else {
+	                            console.log('user ' + name + ' already exists');
+	                        }
+	
+	                    case 8:
+	                    case 'end':
+	                        return _context2.stop();
+	                }
+	            }
+	        }, _callee2, this, [[0, 5]]);
+	    }));
+	
+	    return function initUser(_x2) {
+	        return ref.apply(this, arguments);
+	    };
+	}();
+	
+	var initDbUsers = function () {
+	    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(_ref5) {
+	        var uri = _ref5.uri;
+	        var _ref5$credentials = _ref5.credentials;
+	        var admin = _ref5$credentials.admin;
+	        var users = _ref5$credentials.users;
+	        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	            while (1) {
+	                switch (_context3.prev = _context3.next) {
+	                    case 0:
+	                        _context3.prev = 0;
+	                        _context3.next = 3;
+	                        return createSuperAdmin.bind(this)(_extends({ uri: uri }, admin));
+	
+	                    case 3:
+	                        _context3.next = 8;
+	                        break;
+	
+	                    case 5:
+	                        _context3.prev = 5;
+	                        _context3.t0 = _context3['catch'](0);
+	
+	                        catchAndTrace('error in initDbUsers', _context3.t0);
+	
+	                    case 8:
+	                        users.forEach(initUser.bind(this));
+	
+	                    case 9:
+	                    case 'end':
+	                        return _context3.stop();
+	                }
+	            }
+	        }, _callee3, this, [[0, 5]]);
+	    }));
+	
+	    return function initDbUsers(_x3) {
+	        return ref.apply(this, arguments);
+	    };
+	}();
+	
+	exports.ensureRemoteExistence = ensureRemoteExistence;
+	
+	var _requisition = __webpack_require__(17);
+	
+	var _requisition2 = _interopRequireDefault(_requisition);
+	
+	var _db = __webpack_require__(2);
+	
+	var _db2 = _interopRequireDefault(_db);
+	
+	var _child_process = __webpack_require__(11);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	
+	function catchAndTrace(message, err) {
+	    console.log(message, err);
+	    console.trace(err);
+	}
+	
+	function injectCredentials(_ref) {
+	    var uri = _ref.uri;
+	    var _ref$protocols = _ref.protocols;
+	    var protocols = _ref$protocols === undefined ? ['http', 'https'] : _ref$protocols;
+	    var _ref$admin = _ref.admin;
+	    var name = _ref$admin.name;
+	    var password = _ref$admin.password;
+	
+	    var p = protocols.filter(function (p) {
+	        return uri.startsWith(p + '://');
+	    })[0] + '://';
+	    return uri.replace(p, '' + p + name + ':' + password + '@');
+	}
+	
+	function safeExec(command) {
+	    try {
+	        (0, _child_process.execSync)(command);
+	    } catch (err) {
+	        console.log('command "' + command + '" failed with with error ' + err);
+	    }
+	}
+	
+	function ensureRemoteExistence(_ref2) {
+	    var uri = _ref2.uri;
+	    var name = _ref2.name;
+	    var _ref2$credentials = _ref2.credentials;
+	    _ref2$credentials = _ref2$credentials === undefined ? {} : _ref2$credentials;
+	    var admin = _ref2$credentials.admin;
+	
+	    if (admin) {
+	        safeExec('curl -silent -X PUT -d \'' + admin.password + '\' ' + uri + '/_config/admins/' + admin.name);
+	    }
+	    var endpoint = admin ? injectCredentials({ uri: uri + '/' + name, admin: admin }) : uri + '/' + name;
+	    safeExec('curl -silent -X PUT ' + endpoint);
+	}
+	
+	exports.default = function () {
+	    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(_ref6) {
+	        var _ref6$settings$db = _ref6.settings.db;
+	        var uri = _ref6$settings$db.uri;
+	        var credentials = _ref6$settings$db.credentials;
+	        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	            while (1) {
+	                switch (_context4.prev = _context4.next) {
+	                    case 0:
+	                        if (credentials) initDbUsers.bind(this)({ uri: uri, credentials: credentials });
+	
+	                    case 1:
+	                    case 'end':
+	                        return _context4.stop();
+	                }
+	            }
+	        }, _callee4, this);
+	    }));
+	
+	    function configure(_x4) {
+	        return ref.apply(this, arguments);
+	    }
+	
+	    return configure;
+	}();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+	exports.default = db;
+	
+	var _pouchdb = __webpack_require__(14);
+	
+	var _pouchdb2 = _interopRequireDefault(_pouchdb);
+	
+	var _pouchdbAuthentication = __webpack_require__(15);
+	
+	var _pouchdbAuthentication2 = _interopRequireDefault(_pouchdbAuthentication);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	_pouchdb2.default.plugin(_pouchdbAuthentication2.default);
+	
+	function fullUri(_ref) {
+	   var name = _ref.name;
+	   var uri = _ref.uri;
+	
+	   return uri + '/' + name;
+	}
+	
+	function db(settings) {
+	   return new _pouchdb2.default(fullUri(settings), { skipSetup: true });
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.defaultDataFlows = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.requireAuthWithPersister = requireAuthWithPersister;
+	exports.requireAuthFromRoute = requireAuthFromRoute;
+	exports.provideAuthFromRoute = provideAuthFromRoute;
+	exports.authenticateRoutes = authenticateRoutes;
+	exports.provideInjectionForDomainRouteHandlers = provideInjectionForDomainRouteHandlers;
+	exports.requireInjection = requireInjection;
+	
+	var _react = __webpack_require__(16);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _dataFlows = __webpack_require__(5);
+	
+	var _dataFlows2 = _interopRequireDefault(_dataFlows);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.defaultDataFlows = _dataFlows2.default;
+	function requireAuthWithPersister(_ref) {
+	    var path = _ref.path;
+	    var persister = _ref.persister;
+	
+	    return function requireAuth(nextState, replace, callback) {
+	        var redirect = function redirect(_) {
+	            replace({ nextPathname: nextState.location.pathname }, path);
+	            callback();
+	        };
+	        (persister || this.db).getSession(function (err, response) {
+	            if (err) {
+	                console.log(err);
+	                redirect();
+	            } else if (!response.userCtx.name) {
+	                redirect();
+	            } else {
+	                callback();
+	            }
+	        });
+	    };
+	}
+	
+	function requireAuthFromRoute(path) {
+	    return {
+	        requiresAuthentication: true,
+	        path: path
+	    };
+	}
+	
+	function provideAuthFromRoute(component) {
+	    var placeholder = function placeholder(_) {
+	        return _;
+	    };
+	    Object.assign(placeholder, {
+	        providesAuthentication: true,
+	        component: component
+	    });
+	    return placeholder;
+	}
+	
+	function authenticateRouteBasedOnOnEnter(_ref2) {
+	    var route = _ref2.route;
+	    var persister = _ref2.persister;
+	
+	    return route.props.onEnter && route.props.onEnter.requiresAuthentication ? {
+	        onEnter: requireAuthWithPersister({ path: route.props.onEnter.path, persister: persister })
+	    } : {};
+	}
+	
+	function authenticateFromRouteBasedOnComponent(_ref3) {
+	    var route = _ref3.route;
+	    var persister = _ref3.persister;
+	
+	    return route.props.component && route.props.component.providesAuthentication ? {
+	        component: function component(props) {
+	            return _react2.default.createElement(route.props.component.component, _extends({ auth: persister }, props));
+	        }
+	    } : {};
+	}
+	
+	function authenticateRoutes(route, persister) {
+	    persister = persister || this.db;
+	    return _react2.default.cloneElement(route, _extends({}, authenticateRouteBasedOnOnEnter({ route: route, persister: persister }), authenticateFromRouteBasedOnComponent({ route: route, persister: persister }), {
+	        key: route.props.path
+	    }), route.props.children ? route.props.children.map(function (route) {
+	        return authenticateRoutes(route, persister);
+	    }) : undefined);
+	}
+	
+	function provideInjection(dependentFunction, persister) {
+	    var _this = this;
+	
+	    return function () {
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+	
+	        return dependentFunction.apply(undefined, [persister || _this.db].concat(args));
+	    };
+	}
+	
+	function provideInjectionToHandlers(route, persister) {
+	    route.handlers = route.handlers.map(function (handler) {
+	        return handler.requiresPersister ? provideInjection(handler.dependentFunction, persister) : handler;
+	    });
+	    return route;
+	}
+	
+	function expandPersisterBackedDomain(domain, persister) {
+	    var routes = domain.get('routes');
+	    Object.keys(domain.get('routes')).map(function (route) {
+	        return domain.register('routes', route, provideInjectionToHandlers(routes[route], persister));
+	    });
+	    return domain;
+	}
+	
+	function provideInjectionForDomainRouteHandlers(domains, persister) {
+	    persister = persister || this.db;
+	    return Object.keys(domains).reduce(function (newDomains, k) {
+	        newDomains[k] = expandPersisterBackedDomain(domains[k], persister);
+	        return newDomains;
+	    }, {});
+	}
+	
+	function requireInjection(dependentFunction) {
+	    return {
+	        requiresPersister: true,
+	        dependentFunction: dependentFunction
+	    };
+	}
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = require("redux");
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	exports.default = {
+	    INSERT: function INSERT(state, payload) {
+	        return [payload].concat(_toConsumableArray(state));
+	    },
+	    UPDATE: function UPDATE(state, payload) {
+	        return state.map(function (doc) {
+	            return doc._id == payload._id ? payload : doc;
+	        });
+	    },
+	    REMOVE: function REMOVE(state, _ref) {
+	        var _id = _ref._id;
+	
+	        return state.filter(function (doc) {
+	            return doc._id != _id;
+	        });
+	    }
+	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _strictduckDomainDrivenFullstack = __webpack_require__(18);
+	
+	var _domainMiddlewareGenerator = __webpack_require__(7);
+	
+	var _domainMiddlewareGenerator2 = _interopRequireDefault(_domainMiddlewareGenerator);
+	
+	var _db = __webpack_require__(2);
+	
+	var _db2 = _interopRequireDefault(_db);
+	
+	var _utils = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var provide = ( true ? __webpack_require__(1) : require('./domainMiddlewareGenerator')).default;
+	var putDb =  true ? __webpack_require__(1).ensureRemoteExistence : function (_) {
+	    return _;
+	};
+	
+	exports.default = _strictduckDomainDrivenFullstack.storePersistencePlugin.implement({
+	    name: 'DomainDrivenPouchPersistencePlugin',
+	    constructor: function constructor(_ref) {
+	        var db = _ref.Domains.settings.db;
+	
+	        putDb(db);
+	        return [{
+	            db: (0, _db2.default)(db),
+	            middlewareGenerator: _domainMiddlewareGenerator2.default,
+	            authenticateRoutes: _utils.authenticateRoutes,
+	            provideAuthFromRoute: _utils.provideAuthFromRoute,
+	            provideInjectionForDomainRouteHandlers: _utils.provideInjectionForDomainRouteHandlers
+	        }];
+	    },
+	    provider: function provider() {
+	        return provide.bind(this.db).apply(undefined, arguments);
+	    }
+	});
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = domainDrivenReduxMiddleware;
+	
+	var _redux = __webpack_require__(4);
+	
+	var _reduxMiddleware = __webpack_require__(9);
+	
+	var _reduxMiddleware2 = _interopRequireDefault(_reduxMiddleware);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function invert(obj) {
+	    return Object.keys(obj).reduce(function (inversion, key) {
+	        inversion[obj[key]] = key;
+	        return inversion;
+	    }, {});
+	}
+	
+	function dbActions(_ref) {
+	    var _ref$domain = _ref.domain;
+	    var _ref$domain$actions = _ref$domain.actions;
+	    var actions = _ref$domain$actions === undefined ? {} : _ref$domain$actions;
+	    var _ref$domain$pouchActi = _ref$domain.pouchActionMap;
+	    var actionMap = _ref$domain$pouchActi === undefined ? { insert: 'insert', update: 'update', remove: 'remove' } : _ref$domain$pouchActi;
+	
+	    var invertedActionMap = invert(actionMap);
+	    var acts = Object.keys(actions).filter(function (a) {
+	        return [actionMap.update, actionMap.insert, actionMap.remove].indexOf(a) >= 0;
+	    }).reduce(function (dbActs, a) {
+	        dbActs[invertedActionMap[a]] = function (doc) {
+	            try {
+	                return actions[a](doc);
+	            } catch (e) {
+	                if (e instanceof TypeError) {
+	                    return;
+	                } else {
+	                    throw e;
+	                }
+	            }
+	        };
+	        return dbActs;
+	    }, {});
+	    return Object.keys(acts).length ? acts : false;
+	}
+	
+	function domainDrivenReduxMiddleware(_ref2) {
+	    var db = _ref2.db;
+	    var domains = _ref2.domains;
+	
+	    return (0, _reduxMiddleware2.default)(Object.values(domains).filter(function (domain) {
+	        return dbActions({ domain: domain });
+	    }).map(function (domain) {
+	        return domain;
+	    }).map(function (domain) {
+	        return {
+	            path: '/' + domain.prefix,
+	            prefix: '' + (domain.dbPrefix || ''),
+	            db: db,
+	            actions: dbActions({ domain: domain })
+	        };
+	    }));
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.utils = exports.default = undefined;
+	
+	var _utils = __webpack_require__(3);
+	
+	Object.keys(_utils).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
+	    enumerable: true,
+	    get: function get() {
+	      return _utils[key];
+	    }
+	  });
+	});
+	
+	var _domainDrivenPouchPersistencePlugin = __webpack_require__(6);
+	
+	var _domainDrivenPouchPersistencePlugin2 = _interopRequireDefault(_domainDrivenPouchPersistencePlugin);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _domainDrivenPouchPersistencePlugin2.default;
+	var utils = exports.utils =  true ? __webpack_require__(1) : {};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.default = reduxMiddleware;
+	
+	var _jsonPath = __webpack_require__(13);
+	
+	var _jsonPath2 = _interopRequireDefault(_jsonPath);
+	
+	var _asyncFunctionQueue = __webpack_require__(10);
+	
+	var _asyncFunctionQueue2 = _interopRequireDefault(_asyncFunctionQueue);
+	
+	var _deepEqual = __webpack_require__(12);
+	
+	var _deepEqual2 = _interopRequireDefault(_deepEqual);
+	
+	var _redux = __webpack_require__(4);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function warn(what) {
+	    var fn = console.warn || console.log;
+	    if (fn) {
+	        fn.call(console, what);
+	    }
+	}
+	
+	function defaultAction(action) {
+	    return function () {
+	        throw new Error('no action provided for ' + action);
+	    };
+	}
+	
+	var defaultActions = {
+	    remove: defaultAction('remove'),
+	    update: defaultAction('update'),
+	    insert: defaultAction('insert')
+	};
+	
+	function _initFromDb(path) {
+	    if (!path.lifecycleState) {
+	        path.lifecycleState = 'INITIALIZING';
+	        return path.db.allDocs(_extends({
+	            include_docs: true
+	        }, path.prefix ? {
+	            startkey: path.prefix,
+	            endkey: path.prefix + '￿'
+	        } : {})).then(function (result) {
+	            result.rows.forEach(function (row) {
+	                return onDbChange(path, row);
+	            });
+	            path.lifecycleState = 'INITIALIZED';
+	            listen(path);
+	        });
+	    }
+	}
+	
+	function listen(path) {
+	    var changes = path.db.changes(_extends({
+	        live: true, since: 'now', include_docs: true
+	    }, path.prefix ? {
+	        filter: function filter(_ref) {
+	            var _id = _ref._id;
+	            return _id.split('/')[0] == path.prefix;
+	        }
+	    } : {}));
+	    changes.on('change', function (change) {
+	        return onDbChange(path, change);
+	    });
+	}
+	
+	function processNewStateForPath(path, state) {
+	    var docsContainer = _jsonPath2.default.resolve(state, path.path);
+	
+	    /* istanbul ignore else */
+	    if (docsContainer && docsContainer.length && path.lifecycleState == 'INITIALIZED') {
+	        docsContainer.forEach(function (docs) {
+	            var _differences = differences(path.docs, docs);
+	
+	            var updated = _differences.updated;
+	            var deleted = _differences.deleted;
+	            var inserted = _differences.inserted;
+	
+	            inserted.concat(updated).forEach(function (doc) {
+	                return path.insert(doc);
+	            });
+	            deleted.forEach(function (doc) {
+	                return path.remove(doc);
+	            });
+	        });
+	    }
+	}
+	
+	var Path = function () {
+	    function Path(_ref2) {
+	        var _ref2$path = _ref2.path;
+	        var path = _ref2$path === undefined ? '.' : _ref2$path;
+	        var _ref2$prefix = _ref2.prefix;
+	        var prefix = _ref2$prefix === undefined ? '' : _ref2$prefix;
+	        var db = _ref2.db;
+	        var actions = _ref2.actions;
+	
+	        _classCallCheck(this, Path);
+	
+	        if (!db) {
+	            throw new Error('path ' + path.path + ' needs a db');
+	        }
+	
+	        this.queue = (0, _asyncFunctionQueue2.default)(1);
+	        this.docs = {};
+	
+	        this.db = db;
+	        this.path = path;
+	        this.prefix = prefix;
+	        this.actions = Object.assign({}, defaultActions, actions);
+	    }
+	
+	    _createClass(Path, [{
+	        key: 'insert',
+	        value: function insert(doc) {
+	            this.docs[doc._id] = doc;
+	            var db = this.db;
+	            this.queue.push(function (cb) {
+	                db.put(doc, cb);
+	            });
+	        }
+	    }, {
+	        key: 'remove',
+	        value: function remove(doc) {
+	            var _this = this;
+	
+	            var db = this.db;
+	            this.queue.push(function (cb) {
+	                db.remove(doc, cb);
+	                delete _this.docs[doc._id];
+	            });
+	        }
+	    }, {
+	        key: 'wrapActionCreators',
+	        value: function wrapActionCreators(dispatch) {
+	            var _this2 = this;
+	
+	            this.propagations = Object.keys(this.actions).reduce(function (propagations, act) {
+	                propagations[act] = function (doc) {
+	                    var action = _this2.actions[act](doc);
+	                    if (action) dispatch(action);
+	                };
+	                return propagations;
+	            }, {});
+	        }
+	    }, {
+	        key: 'initFromDb',
+	        value: function initFromDb() {
+	            var _this3 = this;
+	
+	            _initFromDb(this).catch(function (err) {
+	                if (err.status == 401) {
+	                    _this3.lifecycleState = false;
+	                    _this3.db.once('login', function (_) {
+	                        return _initFromDb(_this3);
+	                    });
+	                } else {
+	                    throw err;
+	                }
+	            });
+	        }
+	    }]);
+	
+	    return Path;
+	}();
+	
+	function differences(oldDocs, newDocs) {
+	    var inserted = [],
+	        updated = [],
+	        deleted = Object.keys(oldDocs).map(function (oldDocId) {
+	        return oldDocs[oldDocId];
+	    });
+	
+	    newDocs.forEach(function (newDoc) {
+	        if (!newDoc._id) warn('doc with no id');
+	
+	        deleted = deleted.filter(function (doc) {
+	            return doc._id !== newDoc._id;
+	        });
+	
+	        var oldDoc = oldDocs[newDoc._id];
+	        if (!oldDoc) {
+	            inserted.push(newDoc);
+	        } else if (!(0, _deepEqual2.default)(oldDoc, newDoc)) {
+	            updated.push(newDoc);
+	        }
+	    });
+	    return { inserted: inserted, updated: updated, deleted: deleted };
+	}
+	
+	function onDbChange(path, _ref3) {
+	    var changeDoc = _ref3.doc;
+	
+	    var change = _objectWithoutProperties(_ref3, ['doc']);
+	
+	    if (changeDoc._deleted) {
+	        if (path.docs[changeDoc._id]) {
+	            delete path.docs[changeDoc._id];
+	            path.propagations.remove(changeDoc);
+	        }
+	    } else {
+	        var oldDoc = path.docs[changeDoc._id];
+	        path.docs[changeDoc._id] = changeDoc;
+	        if (oldDoc) {
+	            path.propagations.update(changeDoc);
+	        } else {
+	            path.propagations.insert(changeDoc);
+	        }
+	    }
+	}
+	
+	function reduxMiddleware() {
+	    var paths = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	
+	    if (!Array.isArray(paths)) paths = [paths];
+	
+	    if (!paths.length) throw new Error('PouchMiddleware: no paths');
+	
+	    paths = paths.map(function (options) {
+	        return new Path(options);
+	    });
+	
+	    return function (_ref4) {
+	        var dispatch = _ref4.dispatch;
+	        var getState = _ref4.getState;
+	
+	        paths.forEach(function (path) {
+	            path.wrapActionCreators(dispatch);
+	            path.initFromDb();
+	        });
+	        return function (next) {
+	            return function (action) {
+	                var nextAction = next(action);
+	                paths.forEach(function (path) {
+	                    return processNewStateForPath(path, getState());
+	                });
+	                return nextAction;
+	            };
+	        };
+	    };
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = require("async-function-queue");
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = require("child_process");
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = require("deep-equal");
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = require("json-path");
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = require("pouchdb");
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = require("pouchdb-authentication");
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = require("react");
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = require("requisition");
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = require("strictduck-domain-driven-fullstack");
+
+/***/ }
+/******/ ]);
 //# sourceMappingURL=node_development.js.map

@@ -1,2 +1,722 @@
-require("source-map-support").install(),module.exports=function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return e[r].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){e.exports=n(7)},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}function o(e){return Object.keys(e).reduce(function(t,n){return t[e[n]]=n,t},{})}function u(e){var t=e.domain,n=t.actions,r=void 0===n?{}:n,u=t.pouchActionMap,i=void 0===u?{insert:"insert",update:"update",remove:"remove"}:u,c=o(i),a=Object.keys(r).filter(function(e){return[i.update,i.insert,i.remove].indexOf(e)>=0}).reduce(function(e,t){return e[c[t]]=function(e){try{return r[t](e)}catch(n){if(n instanceof TypeError)return;throw n}},e},{});return Object.keys(a).length?a:!1}function i(e){var t=e.db,n=e.domains;return(0,a["default"])(Object.values(n).filter(function(e){return u({domain:e})}).map(function(e){return e}).map(function(e){return{path:"/"+e.prefix,prefix:""+(e.dbPrefix||""),db:t,actions:u({domain:e})}}))}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=i;var c=(n(3),n(8)),a=r(c)},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}function o(e){var t=e.path,n=e.persister;return function(e,r,o){var u=function(n){r({nextPathname:e.location.pathname},t),o()};(n||this.db).getSession(function(e,t){e?(console.log(e),u()):t.userCtx.name?o():u()})}}function u(e){return{requiresAuthentication:!0,path:e}}function i(e){var t=function(e){return e};return Object.assign(t,{providesAuthentication:!0,component:e}),t}function c(e){var t=e.route,n=e.persister;return t.props.onEnter&&t.props.onEnter.requiresAuthentication?{onEnter:o({path:t.props.onEnter.path,persister:n})}:{}}function a(e){var t=e.route,n=e.persister;return t.props.component&&t.props.component.providesAuthentication?{component:function(e){return b["default"].createElement(t.props.component.component,v({auth:n},e))}}:{}}function s(e,t){return t=t||this.db,b["default"].cloneElement(e,v({},c({route:e,persister:t}),a({route:e,persister:t}),{key:e.props.path}),e.props.children?e.props.children.map(function(e){return s(e,t)}):void 0)}function f(e,t){var n=this;return function(){for(var r=arguments.length,o=Array(r),u=0;r>u;u++)o[u]=arguments[u];return e.apply(void 0,[t||n.db].concat(o))}}function d(e,t){return e.handlers=e.handlers.map(function(e){return e.requiresPersister?f(e.dependentFunction,t):e}),e}function p(e,t){var n=e.get("routes");return Object.keys(e.get("routes")).map(function(r){return e.register("routes",r,d(n[r],t))}),e}function l(e,t){return t=t||this.db,Object.keys(e).reduce(function(n,r){return n[r]=p(e[r],t),n},{})}function h(e){return{requiresPersister:!0,dependentFunction:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.defaultDataFlows=void 0;var v=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t.requireAuthWithPersister=o,t.requireAuthFromRoute=u,t.provideAuthFromRoute=i,t.authenticateRoutes=s,t.provideInjectionForDomainRouteHandlers=l,t.requireInjection=h;var m=n(14),b=r(m),y=n(4),_=r(y);t.defaultDataFlows=_["default"]},function(e,t){e.exports=require("redux")},function(e,t){"use strict";function n(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]={INSERT:function(e,t){return[t].concat(n(e))},UPDATE:function(e,t){return e.map(function(e){return e._id==t._id?t:e})},REMOVE:function(e,t){var n=t._id;return e.filter(function(e){return e._id!=n})}}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}function o(e){var t=e.name,n=e.uri;return n+"/"+t}function u(e){return new c["default"](o(e),{skipSetup:!0})}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=u;var i=n(12),c=r(i),a=n(13),s=r(a);c["default"].plugin(s["default"])},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0});var o=n(15),u=n(1),i=r(u),c=n(5),a=r(c),s=n(2),f=n(1)["default"],d=function(e){return e};t["default"]=o.storePersistencePlugin.implement({name:"DomainDrivenPouchPersistencePlugin",constructor:function(e){var t=e.Domains.settings.db;return d(t),[{db:(0,a["default"])(t),middlewareGenerator:i["default"],authenticateRoutes:s.authenticateRoutes,provideAuthFromRoute:s.provideAuthFromRoute,provideInjectionForDomainRouteHandlers:s.provideInjectionForDomainRouteHandlers}]},provider:function(){return f.bind(this.db).apply(void 0,arguments)}})},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t.utils=t["default"]=void 0;var o=n(2);Object.keys(o).forEach(function(e){"default"!==e&&Object.defineProperty(t,e,{enumerable:!0,get:function(){return o[e]}})});var u=n(6),i=r(u);t["default"]=i["default"];t.utils={}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e){var t=console.warn||console.log;t&&t.call(console,e)}function c(e){return function(){throw new Error("no action provided for "+e)}}function a(e){return e.lifecycleState?void 0:(e.lifecycleState="INITIALIZING",e.db.allDocs(v({include_docs:!0},e.prefix?{startkey:e.prefix,endkey:e.prefix+"￿"}:{})).then(function(t){t.rows.forEach(function(t){return p(e,t)}),e.lifecycleState="INITIALIZED",s(e)}))}function s(e){var t=e.db.changes(v({live:!0,since:"now",include_docs:!0},e.prefix?{filter:function(t){var n=t._id;return n.split("/")[0]==e.prefix}}:{}));t.on("change",function(t){return p(e,t)})}function f(e,t){var n=b["default"].resolve(t,e.path);n&&n.length&&"INITIALIZED"==e.lifecycleState&&n.forEach(function(t){var n=d(e.docs,t),r=n.updated,o=n.deleted,u=n.inserted;u.concat(r).forEach(function(t){return e.insert(t)}),o.forEach(function(t){return e.remove(t)})})}function d(e,t){var n=[],r=[],o=Object.keys(e).map(function(t){return e[t]});return t.forEach(function(t){t._id||i("doc with no id"),o=o.filter(function(e){return e._id!==t._id});var u=e[t._id];u?(0,O["default"])(u,t)||r.push(t):n.push(t)}),{inserted:n,updated:r,deleted:o}}function p(e,t){var n=t.doc;o(t,["doc"]);if(n._deleted)e.docs[n._id]&&(delete e.docs[n._id],e.propagations.remove(n));else{var r=e.docs[n._id];e.docs[n._id]=n,r?e.propagations.update(n):e.propagations.insert(n)}}function l(){var e=arguments.length<=0||void 0===arguments[0]?[]:arguments[0];if(Array.isArray(e)||(e=[e]),!e.length)throw new Error("PouchMiddleware: no paths");return e=e.map(function(e){return new x(e)}),function(t){var n=t.dispatch,r=t.getState;return e.forEach(function(e){e.wrapActionCreators(n),e.initFromDb()}),function(t){return function(n){var o=t(n);return e.forEach(function(e){return f(e,r())}),o}}}}Object.defineProperty(t,"__esModule",{value:!0});var h=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),v=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t["default"]=l;var m=n(11),b=r(m),y=n(9),_=r(y),g=n(10),O=r(g),j=(n(3),{remove:c("remove"),update:c("update"),insert:c("insert")}),x=function(){function e(t){var n=t.path,r=void 0===n?".":n,o=t.prefix,i=void 0===o?"":o,c=t.db,a=t.actions;if(u(this,e),!c)throw new Error("path "+r.path+" needs a db");this.queue=(0,_["default"])(1),this.docs={},this.db=c,this.path=r,this.prefix=i,this.actions=Object.assign({},j,a)}return h(e,[{key:"insert",value:function(e){this.docs[e._id]=e;var t=this.db;this.queue.push(function(n){t.put(e,n)})}},{key:"remove",value:function(e){var t=this,n=this.db;this.queue.push(function(r){n.remove(e,r),delete t.docs[e._id]})}},{key:"wrapActionCreators",value:function(e){var t=this;this.propagations=Object.keys(this.actions).reduce(function(n,r){return n[r]=function(n){var o=t.actions[r](n);o&&e(o)},n},{})}},{key:"initFromDb",value:function(){var e=this;a(this)["catch"](function(t){if(401!=t.status)throw t;e.lifecycleState=!1,e.db.once("login",function(t){return a(e)})})}}]),e}()},function(e,t){e.exports=require("async-function-queue")},function(e,t){e.exports=require("deep-equal")},function(e,t){e.exports=require("json-path")},function(e,t){e.exports=require("pouchdb")},function(e,t){e.exports=require("pouchdb-authentication")},function(e,t){e.exports=require("react")},function(e,t){e.exports=require("strictduck-domain-driven-fullstack")}]);
+require("source-map-support").install();
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(7);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = domainDrivenReduxMiddleware;
+	
+	var _redux = __webpack_require__(3);
+	
+	var _reduxMiddleware = __webpack_require__(8);
+	
+	var _reduxMiddleware2 = _interopRequireDefault(_reduxMiddleware);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function invert(obj) {
+	    return Object.keys(obj).reduce(function (inversion, key) {
+	        inversion[obj[key]] = key;
+	        return inversion;
+	    }, {});
+	}
+	
+	function dbActions(_ref) {
+	    var _ref$domain = _ref.domain;
+	    var _ref$domain$actions = _ref$domain.actions;
+	    var actions = _ref$domain$actions === undefined ? {} : _ref$domain$actions;
+	    var _ref$domain$pouchActi = _ref$domain.pouchActionMap;
+	    var actionMap = _ref$domain$pouchActi === undefined ? { insert: 'insert', update: 'update', remove: 'remove' } : _ref$domain$pouchActi;
+	
+	    var invertedActionMap = invert(actionMap);
+	    var acts = Object.keys(actions).filter(function (a) {
+	        return [actionMap.update, actionMap.insert, actionMap.remove].indexOf(a) >= 0;
+	    }).reduce(function (dbActs, a) {
+	        dbActs[invertedActionMap[a]] = function (doc) {
+	            try {
+	                return actions[a](doc);
+	            } catch (e) {
+	                if (e instanceof TypeError) {
+	                    return;
+	                } else {
+	                    throw e;
+	                }
+	            }
+	        };
+	        return dbActs;
+	    }, {});
+	    return Object.keys(acts).length ? acts : false;
+	}
+	
+	function domainDrivenReduxMiddleware(_ref2) {
+	    var db = _ref2.db;
+	    var domains = _ref2.domains;
+	
+	    return (0, _reduxMiddleware2.default)(Object.values(domains).filter(function (domain) {
+	        return dbActions({ domain: domain });
+	    }).map(function (domain) {
+	        return domain;
+	    }).map(function (domain) {
+	        return {
+	            path: '/' + domain.prefix,
+	            prefix: '' + (domain.dbPrefix || ''),
+	            db: db,
+	            actions: dbActions({ domain: domain })
+	        };
+	    }));
+	}
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.defaultDataFlows = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.requireAuthWithPersister = requireAuthWithPersister;
+	exports.requireAuthFromRoute = requireAuthFromRoute;
+	exports.provideAuthFromRoute = provideAuthFromRoute;
+	exports.authenticateRoutes = authenticateRoutes;
+	exports.provideInjectionForDomainRouteHandlers = provideInjectionForDomainRouteHandlers;
+	exports.requireInjection = requireInjection;
+	
+	var _react = __webpack_require__(14);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _dataFlows = __webpack_require__(4);
+	
+	var _dataFlows2 = _interopRequireDefault(_dataFlows);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.defaultDataFlows = _dataFlows2.default;
+	function requireAuthWithPersister(_ref) {
+	    var path = _ref.path;
+	    var persister = _ref.persister;
+	
+	    return function requireAuth(nextState, replace, callback) {
+	        var redirect = function redirect(_) {
+	            replace({ nextPathname: nextState.location.pathname }, path);
+	            callback();
+	        };
+	        (persister || this.db).getSession(function (err, response) {
+	            if (err) {
+	                console.log(err);
+	                redirect();
+	            } else if (!response.userCtx.name) {
+	                redirect();
+	            } else {
+	                callback();
+	            }
+	        });
+	    };
+	}
+	
+	function requireAuthFromRoute(path) {
+	    return {
+	        requiresAuthentication: true,
+	        path: path
+	    };
+	}
+	
+	function provideAuthFromRoute(component) {
+	    var placeholder = function placeholder(_) {
+	        return _;
+	    };
+	    Object.assign(placeholder, {
+	        providesAuthentication: true,
+	        component: component
+	    });
+	    return placeholder;
+	}
+	
+	function authenticateRouteBasedOnOnEnter(_ref2) {
+	    var route = _ref2.route;
+	    var persister = _ref2.persister;
+	
+	    return route.props.onEnter && route.props.onEnter.requiresAuthentication ? {
+	        onEnter: requireAuthWithPersister({ path: route.props.onEnter.path, persister: persister })
+	    } : {};
+	}
+	
+	function authenticateFromRouteBasedOnComponent(_ref3) {
+	    var route = _ref3.route;
+	    var persister = _ref3.persister;
+	
+	    return route.props.component && route.props.component.providesAuthentication ? {
+	        component: function component(props) {
+	            return _react2.default.createElement(route.props.component.component, _extends({ auth: persister }, props));
+	        }
+	    } : {};
+	}
+	
+	function authenticateRoutes(route, persister) {
+	    persister = persister || this.db;
+	    return _react2.default.cloneElement(route, _extends({}, authenticateRouteBasedOnOnEnter({ route: route, persister: persister }), authenticateFromRouteBasedOnComponent({ route: route, persister: persister }), {
+	        key: route.props.path
+	    }), route.props.children ? route.props.children.map(function (route) {
+	        return authenticateRoutes(route, persister);
+	    }) : undefined);
+	}
+	
+	function provideInjection(dependentFunction, persister) {
+	    var _this = this;
+	
+	    return function () {
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+	
+	        return dependentFunction.apply(undefined, [persister || _this.db].concat(args));
+	    };
+	}
+	
+	function provideInjectionToHandlers(route, persister) {
+	    route.handlers = route.handlers.map(function (handler) {
+	        return handler.requiresPersister ? provideInjection(handler.dependentFunction, persister) : handler;
+	    });
+	    return route;
+	}
+	
+	function expandPersisterBackedDomain(domain, persister) {
+	    var routes = domain.get('routes');
+	    Object.keys(domain.get('routes')).map(function (route) {
+	        return domain.register('routes', route, provideInjectionToHandlers(routes[route], persister));
+	    });
+	    return domain;
+	}
+	
+	function provideInjectionForDomainRouteHandlers(domains, persister) {
+	    persister = persister || this.db;
+	    return Object.keys(domains).reduce(function (newDomains, k) {
+	        newDomains[k] = expandPersisterBackedDomain(domains[k], persister);
+	        return newDomains;
+	    }, {});
+	}
+	
+	function requireInjection(dependentFunction) {
+	    return {
+	        requiresPersister: true,
+	        dependentFunction: dependentFunction
+	    };
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("redux");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	exports.default = {
+	    INSERT: function INSERT(state, payload) {
+	        return [payload].concat(_toConsumableArray(state));
+	    },
+	    UPDATE: function UPDATE(state, payload) {
+	        return state.map(function (doc) {
+	            return doc._id == payload._id ? payload : doc;
+	        });
+	    },
+	    REMOVE: function REMOVE(state, _ref) {
+	        var _id = _ref._id;
+	
+	        return state.filter(function (doc) {
+	            return doc._id != _id;
+	        });
+	    }
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+	exports.default = db;
+	
+	var _pouchdb = __webpack_require__(12);
+	
+	var _pouchdb2 = _interopRequireDefault(_pouchdb);
+	
+	var _pouchdbAuthentication = __webpack_require__(13);
+	
+	var _pouchdbAuthentication2 = _interopRequireDefault(_pouchdbAuthentication);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	_pouchdb2.default.plugin(_pouchdbAuthentication2.default);
+	
+	function fullUri(_ref) {
+	   var name = _ref.name;
+	   var uri = _ref.uri;
+	
+	   return uri + '/' + name;
+	}
+	
+	function db(settings) {
+	   return new _pouchdb2.default(fullUri(settings), { skipSetup: true });
+	}
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _strictduckDomainDrivenFullstack = __webpack_require__(15);
+	
+	var _domainMiddlewareGenerator = __webpack_require__(1);
+	
+	var _domainMiddlewareGenerator2 = _interopRequireDefault(_domainMiddlewareGenerator);
+	
+	var _db = __webpack_require__(5);
+	
+	var _db2 = _interopRequireDefault(_db);
+	
+	var _utils = __webpack_require__(2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var provide = ( false ? require('./configureServer') : __webpack_require__(1)).default;
+	var putDb =  false ? require('./configureServer').ensureRemoteExistence : function (_) {
+	    return _;
+	};
+	
+	exports.default = _strictduckDomainDrivenFullstack.storePersistencePlugin.implement({
+	    name: 'DomainDrivenPouchPersistencePlugin',
+	    constructor: function constructor(_ref) {
+	        var db = _ref.Domains.settings.db;
+	
+	        putDb(db);
+	        return [{
+	            db: (0, _db2.default)(db),
+	            middlewareGenerator: _domainMiddlewareGenerator2.default,
+	            authenticateRoutes: _utils.authenticateRoutes,
+	            provideAuthFromRoute: _utils.provideAuthFromRoute,
+	            provideInjectionForDomainRouteHandlers: _utils.provideInjectionForDomainRouteHandlers
+	        }];
+	    },
+	    provider: function provider() {
+	        return provide.bind(this.db).apply(undefined, arguments);
+	    }
+	});
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.utils = exports.default = undefined;
+	
+	var _utils = __webpack_require__(2);
+	
+	Object.keys(_utils).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
+	    enumerable: true,
+	    get: function get() {
+	      return _utils[key];
+	    }
+	  });
+	});
+	
+	var _domainDrivenPouchPersistencePlugin = __webpack_require__(6);
+	
+	var _domainDrivenPouchPersistencePlugin2 = _interopRequireDefault(_domainDrivenPouchPersistencePlugin);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _domainDrivenPouchPersistencePlugin2.default;
+	var utils = exports.utils =  false ? require('./configureServer') : {};
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.default = reduxMiddleware;
+	
+	var _jsonPath = __webpack_require__(11);
+	
+	var _jsonPath2 = _interopRequireDefault(_jsonPath);
+	
+	var _asyncFunctionQueue = __webpack_require__(9);
+	
+	var _asyncFunctionQueue2 = _interopRequireDefault(_asyncFunctionQueue);
+	
+	var _deepEqual = __webpack_require__(10);
+	
+	var _deepEqual2 = _interopRequireDefault(_deepEqual);
+	
+	var _redux = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function warn(what) {
+	    var fn = console.warn || console.log;
+	    if (fn) {
+	        fn.call(console, what);
+	    }
+	}
+	
+	function defaultAction(action) {
+	    return function () {
+	        throw new Error('no action provided for ' + action);
+	    };
+	}
+	
+	var defaultActions = {
+	    remove: defaultAction('remove'),
+	    update: defaultAction('update'),
+	    insert: defaultAction('insert')
+	};
+	
+	function _initFromDb(path) {
+	    if (!path.lifecycleState) {
+	        path.lifecycleState = 'INITIALIZING';
+	        return path.db.allDocs(_extends({
+	            include_docs: true
+	        }, path.prefix ? {
+	            startkey: path.prefix,
+	            endkey: path.prefix + '￿'
+	        } : {})).then(function (result) {
+	            result.rows.forEach(function (row) {
+	                return onDbChange(path, row);
+	            });
+	            path.lifecycleState = 'INITIALIZED';
+	            listen(path);
+	        });
+	    }
+	}
+	
+	function listen(path) {
+	    var changes = path.db.changes(_extends({
+	        live: true, since: 'now', include_docs: true
+	    }, path.prefix ? {
+	        filter: function filter(_ref) {
+	            var _id = _ref._id;
+	            return _id.split('/')[0] == path.prefix;
+	        }
+	    } : {}));
+	    changes.on('change', function (change) {
+	        return onDbChange(path, change);
+	    });
+	}
+	
+	function processNewStateForPath(path, state) {
+	    var docsContainer = _jsonPath2.default.resolve(state, path.path);
+	
+	    /* istanbul ignore else */
+	    if (docsContainer && docsContainer.length && path.lifecycleState == 'INITIALIZED') {
+	        docsContainer.forEach(function (docs) {
+	            var _differences = differences(path.docs, docs);
+	
+	            var updated = _differences.updated;
+	            var deleted = _differences.deleted;
+	            var inserted = _differences.inserted;
+	
+	            inserted.concat(updated).forEach(function (doc) {
+	                return path.insert(doc);
+	            });
+	            deleted.forEach(function (doc) {
+	                return path.remove(doc);
+	            });
+	        });
+	    }
+	}
+	
+	var Path = function () {
+	    function Path(_ref2) {
+	        var _ref2$path = _ref2.path;
+	        var path = _ref2$path === undefined ? '.' : _ref2$path;
+	        var _ref2$prefix = _ref2.prefix;
+	        var prefix = _ref2$prefix === undefined ? '' : _ref2$prefix;
+	        var db = _ref2.db;
+	        var actions = _ref2.actions;
+	
+	        _classCallCheck(this, Path);
+	
+	        if (!db) {
+	            throw new Error('path ' + path.path + ' needs a db');
+	        }
+	
+	        this.queue = (0, _asyncFunctionQueue2.default)(1);
+	        this.docs = {};
+	
+	        this.db = db;
+	        this.path = path;
+	        this.prefix = prefix;
+	        this.actions = Object.assign({}, defaultActions, actions);
+	    }
+	
+	    _createClass(Path, [{
+	        key: 'insert',
+	        value: function insert(doc) {
+	            this.docs[doc._id] = doc;
+	            var db = this.db;
+	            this.queue.push(function (cb) {
+	                db.put(doc, cb);
+	            });
+	        }
+	    }, {
+	        key: 'remove',
+	        value: function remove(doc) {
+	            var _this = this;
+	
+	            var db = this.db;
+	            this.queue.push(function (cb) {
+	                db.remove(doc, cb);
+	                delete _this.docs[doc._id];
+	            });
+	        }
+	    }, {
+	        key: 'wrapActionCreators',
+	        value: function wrapActionCreators(dispatch) {
+	            var _this2 = this;
+	
+	            this.propagations = Object.keys(this.actions).reduce(function (propagations, act) {
+	                propagations[act] = function (doc) {
+	                    var action = _this2.actions[act](doc);
+	                    if (action) dispatch(action);
+	                };
+	                return propagations;
+	            }, {});
+	        }
+	    }, {
+	        key: 'initFromDb',
+	        value: function initFromDb() {
+	            var _this3 = this;
+	
+	            _initFromDb(this).catch(function (err) {
+	                if (err.status == 401) {
+	                    _this3.lifecycleState = false;
+	                    _this3.db.once('login', function (_) {
+	                        return _initFromDb(_this3);
+	                    });
+	                } else {
+	                    throw err;
+	                }
+	            });
+	        }
+	    }]);
+	
+	    return Path;
+	}();
+	
+	function differences(oldDocs, newDocs) {
+	    var inserted = [],
+	        updated = [],
+	        deleted = Object.keys(oldDocs).map(function (oldDocId) {
+	        return oldDocs[oldDocId];
+	    });
+	
+	    newDocs.forEach(function (newDoc) {
+	        if (!newDoc._id) warn('doc with no id');
+	
+	        deleted = deleted.filter(function (doc) {
+	            return doc._id !== newDoc._id;
+	        });
+	
+	        var oldDoc = oldDocs[newDoc._id];
+	        if (!oldDoc) {
+	            inserted.push(newDoc);
+	        } else if (!(0, _deepEqual2.default)(oldDoc, newDoc)) {
+	            updated.push(newDoc);
+	        }
+	    });
+	    return { inserted: inserted, updated: updated, deleted: deleted };
+	}
+	
+	function onDbChange(path, _ref3) {
+	    var changeDoc = _ref3.doc;
+	
+	    var change = _objectWithoutProperties(_ref3, ['doc']);
+	
+	    if (changeDoc._deleted) {
+	        if (path.docs[changeDoc._id]) {
+	            delete path.docs[changeDoc._id];
+	            path.propagations.remove(changeDoc);
+	        }
+	    } else {
+	        var oldDoc = path.docs[changeDoc._id];
+	        path.docs[changeDoc._id] = changeDoc;
+	        if (oldDoc) {
+	            path.propagations.update(changeDoc);
+	        } else {
+	            path.propagations.insert(changeDoc);
+	        }
+	    }
+	}
+	
+	function reduxMiddleware() {
+	    var paths = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	
+	    if (!Array.isArray(paths)) paths = [paths];
+	
+	    if (!paths.length) throw new Error('PouchMiddleware: no paths');
+	
+	    paths = paths.map(function (options) {
+	        return new Path(options);
+	    });
+	
+	    return function (_ref4) {
+	        var dispatch = _ref4.dispatch;
+	        var getState = _ref4.getState;
+	
+	        paths.forEach(function (path) {
+	            path.wrapActionCreators(dispatch);
+	            path.initFromDb();
+	        });
+	        return function (next) {
+	            return function (action) {
+	                var nextAction = next(action);
+	                paths.forEach(function (path) {
+	                    return processNewStateForPath(path, getState());
+	                });
+	                return nextAction;
+	            };
+	        };
+	    };
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = require("async-function-queue");
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = require("deep-equal");
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = require("json-path");
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = require("pouchdb");
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = require("pouchdb-authentication");
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = require("react");
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = require("strictduck-domain-driven-fullstack");
+
+/***/ }
+/******/ ]);
 //# sourceMappingURL=browser_development.js.map
