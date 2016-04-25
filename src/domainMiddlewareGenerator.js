@@ -10,7 +10,11 @@ function invert(obj){
     ,{})
 }
 
-function dbActions({domain: {actions = {}, pouchActionMap: actionMap={insert: 'insert', update: 'update', remove: 'remove'} }}){
+let defaultActionMap = {insert: 'insert', update: 'update', remove: 'remove'}
+function dbActions({domain: {
+    actions = {},
+    pouchActionMap: actionMap=defaultActionMap
+}}){
     let invertedActionMap = invert(actionMap) 
     let acts = Object.keys(actions)
         .filter(a => [actionMap.update, actionMap.insert, actionMap.remove].indexOf(a) >= 0 )
@@ -35,7 +39,6 @@ export default function domainDrivenReduxMiddleware({db, domains}){
     return reduxMiddleware(
         Object.values(domains)
             .filter(domain => dbActions({ domain }))
-            .map(domain => domain)
             .map( domain => ({
                 path: `/${domain.prefix}`,
                 prefix: `${domain.dbPrefix || ''}`,

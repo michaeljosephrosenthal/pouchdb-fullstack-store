@@ -75,12 +75,13 @@ module.exports =
 	    }, {});
 	}
 	
+	var defaultActionMap = { insert: 'insert', update: 'update', remove: 'remove' };
 	function dbActions(_ref) {
 	    var _ref$domain = _ref.domain;
 	    var _ref$domain$actions = _ref$domain.actions;
 	    var actions = _ref$domain$actions === undefined ? {} : _ref$domain$actions;
 	    var _ref$domain$pouchActi = _ref$domain.pouchActionMap;
-	    var actionMap = _ref$domain$pouchActi === undefined ? { insert: 'insert', update: 'update', remove: 'remove' } : _ref$domain$pouchActi;
+	    var actionMap = _ref$domain$pouchActi === undefined ? defaultActionMap : _ref$domain$pouchActi;
 	
 	    var invertedActionMap = invert(actionMap);
 	    var acts = Object.keys(actions).filter(function (a) {
@@ -108,8 +109,6 @@ module.exports =
 	
 	    return (0, _reduxMiddleware2.default)(Object.values(domains).filter(function (domain) {
 	        return dbActions({ domain: domain });
-	    }).map(function (domain) {
-	        return domain;
 	    }).map(function (domain) {
 	        return {
 	            path: '/' + domain.prefix,
@@ -211,13 +210,27 @@ module.exports =
 	    } : {};
 	}
 	
+	function applyToChildren(_ref4) {
+	    var children = _ref4.children;
+	    var block = _ref4.block;
+	
+	    if (children) {
+	        return Array.isArray(children) ? children.map(block) : block(children);
+	    } else {
+	        return children;
+	    }
+	}
+	
 	function authenticateRoutes(route, persister) {
 	    persister = persister || this.db;
 	    return _react2.default.cloneElement(route, _extends({}, authenticateRouteBasedOnOnEnter({ route: route, persister: persister }), authenticateFromRouteBasedOnComponent({ route: route, persister: persister }), {
 	        key: route.props.path
-	    }), route.props.children ? route.props.children.map(function (route) {
-	        return authenticateRoutes(route, persister);
-	    }) : undefined);
+	    }), applyToChildren({
+	        children: route.props.children,
+	        block: function block(route) {
+	            return authenticateRoutes(route, persister);
+	        }
+	    }));
 	}
 	
 	function provideInjection(dependentFunction, persister) {
@@ -649,7 +662,7 @@ module.exports =
 	
 	    if (!Array.isArray(paths)) paths = [paths];
 	
-	    if (!paths.length) throw new Error('PouchMiddleware: no paths');
+	    if (!paths.length) warn('PouchMiddleware: no paths');
 	
 	    paths = paths.map(function (options) {
 	        return new Path(options);

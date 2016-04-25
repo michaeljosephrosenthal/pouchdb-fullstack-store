@@ -161,7 +161,7 @@ export default function reduxMiddleware(paths = []) {
         paths = [paths];
 
     if (!paths.length)
-        throw new Error('PouchMiddleware: no paths');
+        warn('PouchMiddleware: no paths');
 
     paths = paths.map(options => new Path(options))
 

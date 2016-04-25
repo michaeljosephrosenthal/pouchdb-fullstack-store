@@ -48,6 +48,16 @@ function authenticateFromRouteBasedOnComponent({route, persister}) {
     } : {}
 }
 
+function applyToChildren({children, block}){
+    if(children){
+        return Array.isArray(children) ?
+            children.map(block) :
+            block(children)
+    } else {
+        return children
+    }
+}
+
 export function authenticateRoutes(route, persister){
     persister = persister || this.db
     return React.cloneElement(
@@ -57,9 +67,10 @@ export function authenticateRoutes(route, persister){
             ...authenticateFromRouteBasedOnComponent({route, persister}),
             key: route.props.path
         },
-        route.props.children ?
-            route.props.children.map(route => authenticateRoutes(route, persister)) :
-            undefined
+        applyToChildren({
+            children: route.props.children,
+            block: route => authenticateRoutes(route, persister)
+        })
     )
 }
 
