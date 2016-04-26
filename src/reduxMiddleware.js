@@ -1,6 +1,7 @@
 import jPath from 'json-path'
 import Queue from 'async-function-queue'
 import equal from 'deep-equal'
+import clone from 'clone'
 import { bindActionCreators } from 'redux'
 
 function warn(what) {
@@ -80,7 +81,7 @@ class Path {
   }
 
   insert(doc) {
-      this.docs[doc._id] = doc
+      this.docs[doc._id] = clone(doc)
       var db = this.db
       this.queue.push(cb => {
           db.put(doc, cb)
@@ -147,7 +148,7 @@ function onDbChange(path, {doc: changeDoc, ...change}) {
         }
     } else {
         var oldDoc = path.docs[changeDoc._id];
-        path.docs[changeDoc._id] = changeDoc;
+        path.docs[changeDoc._id] = clone(changeDoc);
         if (oldDoc) {
             path.propagations.update(changeDoc);
         } else {
@@ -164,7 +165,6 @@ export default function reduxMiddleware(paths = []) {
         warn('PouchMiddleware: no paths');
 
     paths = paths.map(options => new Path(options))
-
 
     return ({dispatch, getState}) => {
         paths.forEach(path => {

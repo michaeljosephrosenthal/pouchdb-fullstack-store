@@ -206,7 +206,7 @@ module.exports =
 	
 	exports.ensureRemoteExistence = ensureRemoteExistence;
 	
-	var _requisition = __webpack_require__(17);
+	var _requisition = __webpack_require__(18);
 	
 	var _requisition2 = _interopRequireDefault(_requisition);
 	
@@ -298,11 +298,11 @@ module.exports =
 	});
 	exports.default = db;
 	
-	var _pouchdb = __webpack_require__(14);
+	var _pouchdb = __webpack_require__(15);
 	
 	var _pouchdb2 = _interopRequireDefault(_pouchdb);
 	
-	var _pouchdbAuthentication = __webpack_require__(15);
+	var _pouchdbAuthentication = __webpack_require__(16);
 	
 	var _pouchdbAuthentication2 = _interopRequireDefault(_pouchdbAuthentication);
 	
@@ -341,7 +341,7 @@ module.exports =
 	exports.provideInjectionForDomainRouteHandlers = provideInjectionForDomainRouteHandlers;
 	exports.requireInjection = requireInjection;
 	
-	var _react = __webpack_require__(16);
+	var _react = __webpack_require__(17);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -523,7 +523,7 @@ module.exports =
 	    value: true
 	});
 	
-	var _strictduckDomainDrivenFullstack = __webpack_require__(18);
+	var _strictduckDomainDrivenFullstack = __webpack_require__(19);
 	
 	var _domainMiddlewareGenerator = __webpack_require__(7);
 	
@@ -679,7 +679,7 @@ module.exports =
 	
 	exports.default = reduxMiddleware;
 	
-	var _jsonPath = __webpack_require__(13);
+	var _jsonPath = __webpack_require__(14);
 	
 	var _jsonPath2 = _interopRequireDefault(_jsonPath);
 	
@@ -687,9 +687,13 @@ module.exports =
 	
 	var _asyncFunctionQueue2 = _interopRequireDefault(_asyncFunctionQueue);
 	
-	var _deepEqual = __webpack_require__(12);
+	var _deepEqual = __webpack_require__(13);
 	
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
+	
+	var _clone = __webpack_require__(12);
+	
+	var _clone2 = _interopRequireDefault(_clone);
 	
 	var _redux = __webpack_require__(4);
 	
@@ -799,7 +803,7 @@ module.exports =
 	    _createClass(Path, [{
 	        key: 'insert',
 	        value: function insert(doc) {
-	            this.docs[doc._id] = doc;
+	            this.docs[doc._id] = (0, _clone2.default)(doc);
 	            var db = this.db;
 	            this.queue.push(function (cb) {
 	                db.put(doc, cb);
@@ -886,7 +890,7 @@ module.exports =
 	        }
 	    } else {
 	        var oldDoc = path.docs[changeDoc._id];
-	        path.docs[changeDoc._id] = changeDoc;
+	        path.docs[changeDoc._id] = (0, _clone2.default)(changeDoc);
 	        if (oldDoc) {
 	            path.propagations.update(changeDoc);
 	        } else {
@@ -942,40 +946,46 @@ module.exports =
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = require("deep-equal");
+	module.exports = require("clone");
 
 /***/ },
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = require("json-path");
+	module.exports = require("deep-equal");
 
 /***/ },
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = require("pouchdb");
+	module.exports = require("json-path");
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = require("pouchdb-authentication");
+	module.exports = require("pouchdb");
 
 /***/ },
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = require("react");
+	module.exports = require("pouchdb-authentication");
 
 /***/ },
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = require("requisition");
+	module.exports = require("react");
 
 /***/ },
 /* 18 */
+/***/ function(module, exports) {
+
+	module.exports = require("requisition");
+
+/***/ },
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = require("strictduck-domain-driven-fullstack");
