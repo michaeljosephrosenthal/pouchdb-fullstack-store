@@ -1,6 +1,6 @@
 {
   "name": "domain-driven-pouchdb-persistence-plugin",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "persistence plugin for bufflehead",
   "main": "./dist/index.js",
   "scripts": {
@@ -10,6 +10,9 @@
   "author": "Michael Joseph Rosenthal",
   "license": "ISC",
   "dependencies": {
+    "strictduck": "~0.1.2",
+    "strictduck-domain-driven-fullstack": "~0.1.2",
+
     "async-function-queue": "^1.0.0",
     "babel-polyfill": "^6.7.4",
     "clone": "^1.0.2",
@@ -24,8 +27,6 @@
     "requisition": "^1.7.0",
     "slug": "^0.9.1",
     "source-map-support": "^0.4.0",
-    "strictduck": "0.1.1",
-    "strictduck-domain-driven-fullstack": "0.1.1",
     "sync-request": "^3.0.0",
     "tcomb": "^3.0.0"
   },
