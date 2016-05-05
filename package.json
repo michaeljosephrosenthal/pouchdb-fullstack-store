@@ -1,6 +1,6 @@
 {
   "name": "domain-driven-pouchdb-persistence-plugin",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "persistence plugin for bufflehead",
   "main": "./dist/index.js",
   "scripts": {
