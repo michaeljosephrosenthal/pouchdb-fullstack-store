@@ -10,15 +10,10 @@
   "author": "Michael Joseph Rosenthal",
   "license": "ISC",
   "dependencies": {
-    "strictduck": "~0.1.2",
-    "strictduck-domain-driven-fullstack": "~0.1.2",
-
+    "strictduck-domain-driven-fullstack": "~0.1.4",
     "async-function-queue": "^1.0.0",
-    "babel-polyfill": "^6.7.4",
     "clone": "^1.0.2",
     "deep-equal": "^1.0.1",
-    "events": "^1.1.0",
-    "fibers": "^1.0.10",
     "json-path": "^0.1.3",
     "pouchdb": "^5.2.1",
     "pouchdb-authentication": "^0.4.3",
@@ -26,11 +21,10 @@
     "redux": "^3.3.1",
     "requisition": "^1.7.0",
     "slug": "^0.9.1",
-    "source-map-support": "^0.4.0",
     "sync-request": "^3.0.0",
     "tcomb": "^3.0.0"
   },
   "devDependencies": {
-    "polypacker": "0.1.2"
+    "polypacker": "0.1.5"
   }
 }
