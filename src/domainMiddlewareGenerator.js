@@ -36,14 +36,18 @@ function dbActions({domain: {
 }
 
 export default function domainDrivenReduxMiddleware({db, domains}){
-    return reduxMiddleware(
-        Object.values(domains)
-            .filter(domain => dbActions({ domain }))
-            .map( domain => ({
-                path: `/${domain.prefix}`,
-                prefix: `${domain.dbPrefix || ''}`,
-                db,
-                actions: dbActions({ domain })
-            }))
-    )
+    if($ES.CONTEXT == 'BROWSER'){
+        return reduxMiddleware(
+            Object.values(domains)
+                .filter(domain => dbActions({ domain }))
+                .map( domain => ({
+                    path: `/${domain.prefix}`,
+                    prefix: `${domain.dbPrefix || ''}`,
+                    db,
+                    actions: dbActions({ domain })
+                }))
+        )
+    } else {
+        return _ => next => action => next(action)
+    }
 }

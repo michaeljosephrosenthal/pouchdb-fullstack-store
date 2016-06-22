@@ -11,6 +11,14 @@ function warn(what) {
     }
 }
 
+function plain(obj){
+    return JSON.parse(JSON.stringify(obj))
+}
+
+function plainClone(obj){
+    return plain(clone(obj))
+}
+
 function defaultAction(action) {
     return function() {
         throw new Error('no action provided for ' + action);
@@ -81,7 +89,7 @@ class Path {
   }
 
   insert(doc) {
-      this.docs[doc._id] = clone(doc)
+      this.docs[doc._id] = plainClone(doc)
       var db = this.db
       this.queue.push(cb => {
           db.put(doc, cb)
@@ -125,7 +133,7 @@ function differences(oldDocs, newDocs) {
         updated = [],
         deleted = Object.keys(oldDocs).map(oldDocId => oldDocs[oldDocId]);
 
-    newDocs.forEach(newDoc => {
+    newDocs.map(plainClone).forEach(newDoc => {
         if (! newDoc._id) warn('doc with no id');
 
         deleted = deleted.filter(doc => doc._id !== newDoc._id);
@@ -148,7 +156,7 @@ function onDbChange(path, {doc: changeDoc, ...change}) {
         }
     } else {
         var oldDoc = path.docs[changeDoc._id];
-        path.docs[changeDoc._id] = clone(changeDoc);
+        path.docs[changeDoc._id] = plainClone(changeDoc);
         if (oldDoc) {
             path.propagations.update(changeDoc);
         } else {

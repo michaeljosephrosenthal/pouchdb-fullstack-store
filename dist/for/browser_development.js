@@ -107,16 +107,26 @@ module.exports =
 	    var db = _ref2.db;
 	    var domains = _ref2.domains;
 	
-	    return (0, _reduxMiddleware2.default)(Object.values(domains).filter(function (domain) {
-	        return dbActions({ domain: domain });
-	    }).map(function (domain) {
-	        return {
-	            path: '/' + domain.prefix,
-	            prefix: '' + (domain.dbPrefix || ''),
-	            db: db,
-	            actions: dbActions({ domain: domain })
+	    if (true) {
+	        return (0, _reduxMiddleware2.default)(Object.values(domains).filter(function (domain) {
+	            return dbActions({ domain: domain });
+	        }).map(function (domain) {
+	            return {
+	                path: '/' + domain.prefix,
+	                prefix: '' + (domain.dbPrefix || ''),
+	                db: db,
+	                actions: dbActions({ domain: domain })
+	            };
+	        }));
+	    } else {
+	        return function (_) {
+	            return function (next) {
+	                return function (action) {
+	                    return next(action);
+	                };
+	            };
 	        };
-	    }));
+	    }
 	}
 
 /***/ },
@@ -472,6 +482,14 @@ module.exports =
 	    }
 	}
 	
+	function plain(obj) {
+	    return JSON.parse(JSON.stringify(obj));
+	}
+	
+	function plainClone(obj) {
+	    return plain((0, _clone2.default)(obj));
+	}
+	
 	function defaultAction(action) {
 	    return function () {
 	        throw new Error('no action provided for ' + action);
@@ -565,7 +583,7 @@ module.exports =
 	    _createClass(Path, [{
 	        key: 'insert',
 	        value: function insert(doc) {
-	            this.docs[doc._id] = (0, _clone2.default)(doc);
+	            this.docs[doc._id] = plainClone(doc);
 	            var db = this.db;
 	            this.queue.push(function (cb) {
 	                db.put(doc, cb);
@@ -623,7 +641,7 @@ module.exports =
 	        return oldDocs[oldDocId];
 	    });
 	
-	    newDocs.forEach(function (newDoc) {
+	    newDocs.map(plainClone).forEach(function (newDoc) {
 	        if (!newDoc._id) warn('doc with no id');
 	
 	        deleted = deleted.filter(function (doc) {
@@ -652,7 +670,7 @@ module.exports =
 	        }
 	    } else {
 	        var oldDoc = path.docs[changeDoc._id];
-	        path.docs[changeDoc._id] = (0, _clone2.default)(changeDoc);
+	        path.docs[changeDoc._id] = plainClone(changeDoc);
 	        if (oldDoc) {
 	            path.propagations.update(changeDoc);
 	        } else {
